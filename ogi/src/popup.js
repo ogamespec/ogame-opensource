@@ -1,0 +1,197 @@
+/**
+ * OGame Infinity 0.84 — toolbar popup.
+ *
+ * Answers the question the game pages cannot: "is the extension loaded at all,
+ * which version, and what did it decide about the page in this tab?".
+ *
+ * The popup runs in the extension's own context, so it cannot read the game page's
+ * database; it asks the content script of the active tab for the status the script
+ * already computed (see lib/status.js).
+ */
+(function () {
+    'use strict';
+
+    const statusHost = document.getElementById('ogi-popup-status');
+    const stepsHost = document.getElementById('ogi-popup-steps');
+    const noteHost = document.getElementById('ogi-popup-note');
+    const refresh = document.getElementById('ogi-popup-refresh');
+    const welcome = document.getElementById('ogi-popup-welcome');
+
+    /**
+     * Translator of the popup: the interface follows the browser language when the
+     * extension knows it, otherwise English.
+     *
+     * @returns {function(string, object=): string} Translator.
+     */
+    function translator() {
+        const OGI = window.OGI || {};
+        if (!OGI.createI18n) return function (key) { return key; };
+        const short = String(navigator.language || 'en').slice(0, 2).toLowerCase();
+        const known = ['en', 'ru', 'de'];
+        return OGI.createI18n(known.indexOf(short) === -1 ? 'en' : short);
+    }
+
+    /**
+     * Render the "first steps" block: the same three steps the in-game welcome panel
+     * shows, so the popup explains the extension on its own.
+     */
+    function renderSteps() {
+        const OGI = window.OGI || {};
+        const t = translator();
+        if (!stepsHost) return;
+        const steps = ['WELCOME_STEP1', 'WELCOME_STEP2', 'WELCOME_STEP3'];
+        const list = steps.map(function (key) {
+            return '<li>' + (OGI.icon ? OGI.icon('planets', { size: 11 }) : '') + ' ' +
+                escapeHtml(t(key)) + '</li>';
+        }).join('');
+        stepsHost.innerHTML = '<div class="ogi-popup-steps-title">' + escapeHtml(t('WELCOME_STEPS')) +
+            '</div><ul class="ogi-popup-steps-list">' + list + '</ul>';
+    }
+
+    /**
+     * The extension API of the current browser.
+     *
+     * @returns {object} chrome or browser.
+     */
+    function api() {
+        return typeof browser !== 'undefined' && browser.runtime ? browser : chrome;
+    }
+
+    /**
+     * Promise wrapper around the callback/promise APIs of Chrome and Firefox.
+     *
+     * @param {Function} call Function receiving a callback.
+     * @returns {Promise<*>} Result.
+     */
+    function promisify(call) {
+        const impl = api();
+        if (impl === (typeof browser !== 'undefined' ? browser : null)) {
+            return call();
+        }
+        return new Promise(function (resolve, reject) {
+            call(function (result) {
+                const error = chrome.runtime.lastError;
+                if (error) reject(new Error(error.message));
+                else resolve(result);
+            });
+        });
+    }
+
+    /**
+     * Render one "label: value" row.
+     *
+     * @param {string} label Label.
+     * @param {string} value Value.
+     * @param {string} [iconName] Icon of the row.
+     * @returns {HTMLElement} Row.
+     */
+    function row(label, value, iconName) {
+        const element = document.createElement('div');
+        element.className = 'ogi-popup-row';
+        const left = document.createElement('span');
+        left.innerHTML = (iconName && window.OGI && window.OGI.icon ? window.OGI.icon(iconName, { size: 12 }) : '') +
+            escapeHtml(label);
+        const right = document.createElement('span');
+        right.textContent = value;
+        element.appendChild(left);
+        element.appendChild(right);
+        return element;
+    }
+
+    /**
+     * Escape a label for the innerHTML of a row.
+     *
+     * @param {string} text Text.
+     * @returns {string} Escaped text.
+     */
+    function escapeHtml(text) {
+        return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    /**
+     * Render the status of the active tab.
+     *
+     * @param {object} status Status payload.
+     * @param {string} version Extension version.
+     */
+    function render(status, version) {
+        statusHost.textContent = '';
+        statusHost.appendChild(row('Version', status.version || version, 'settings'));
+        statusHost.appendChild(row('Game page', status.game ? 'yes' : 'no', 'planets'));
+        statusHost.appendChild(row('Page', status.page || '—', 'galaxy'));
+        statusHost.appendChild(row('Universe', status.universe || '—', 'empire'));
+        statusHost.appendChild(row('Language', status.lang || '—', 'stats'));
+        statusHost.appendChild(row('Storage', status.storage ? 'ok' : 'in memory', 'recycler'));
+        statusHost.appendChild(row('Panel', status.handler || 'none', 'spy'));
+        statusHost.appendChild(row('Session', status.session ? 'found' : 'missing', 'clock'));
+
+        const counts = status.counts || {};
+        statusHost.appendChild(row('Spy reports', String(counts.spies === undefined ? 0 : counts.spies), 'spy'));
+        statusHost.appendChild(row('Combats', String(counts.combats === undefined ? 0 : counts.combats), 'combat'));
+        statusHost.appendChild(row('Expeditions', String(counts.expeditions === undefined ? 0 : counts.expeditions), 'expedition'));
+
+        if (!status.game) {
+            noteHost.textContent = 'This tab is not an OGame 0.84 page. ' +
+                'The panel appears on the game pages Messages, report popups and Galaxy.';
+        } else if (!status.handler) {
+            noteHost.textContent = 'This is a game page, but the extension has no panel for it. ' +
+                'Open Messages to see the analyzer.';
+        } else {
+            noteHost.textContent = 'Panel: ' + status.handler + '. It is drawn at the top of the content area.';
+        }
+    }
+
+    /**
+     * Ask the content script of the active tab for its status.
+     *
+     * @returns {Promise<void>} Completion.
+     */
+    function load() {
+        const version = api().runtime.getManifest().version;
+        statusHost.textContent = '…';
+        noteHost.textContent = '';
+
+        return promisify(function (done) {
+            return api().tabs.query({ active: true, currentWindow: true }, done);
+        }).then(function (tabs) {
+            const tab = tabs && tabs[0];
+            if (!tab || tab.id === undefined) throw new Error('no active tab');
+            return promisify(function (done) {
+                return api().tabs.sendMessage(tab.id, { type: 'ogi-status' }, done);
+            });
+        }).then(function (status) {
+            if (!status || typeof status !== 'object') throw new Error('no answer');
+            render(status, version);
+        }).catch(function () {
+            statusHost.textContent = '';
+            statusHost.appendChild(row('Version', version));
+            statusHost.appendChild(row('Content script', 'not running'));
+            noteHost.textContent = 'The extension is not injected into this tab. ' +
+                'Reload the extension after changing its files, then refresh the page. ' +
+                'Game pages over file:// need "Allow access to file URLs".';
+        });
+    }
+
+    refresh.addEventListener('click', function () { load(); });
+
+    // Ask the content script of the active tab to show the first-run panel again
+    // (the panel and its settings live with the page, not with the popup).
+    welcome.addEventListener('click', function () {
+        promisify(function (done) {
+            return api().tabs.query({ active: true, currentWindow: true }, done);
+        }).then(function (tabs) {
+            const tab = tabs && tabs[0];
+            if (!tab || tab.id === undefined) throw new Error('no active tab');
+            return promisify(function (done) {
+                return api().tabs.sendMessage(tab.id, { type: 'ogi-welcome' }, done);
+            });
+        }).then(function () {
+            noteHost.textContent = 'The panel is back on the game page.';
+        }).catch(function () {
+            noteHost.textContent = 'Open a game page first: the panel is drawn inside the game.';
+        });
+    });
+
+    load();
+    renderSteps();
+})();

@@ -1,0 +1,466 @@
+/*
+ * OGame Infinity 0.84 — panel styling.
+ *
+ * The palette and the typography follow the 0.84 design that the game itself uses
+ * (css/default.css of the Evolution skin: black background, grey table headers,
+ * white text, yellow links), so the injected panel looks like a native page and
+ * not like a modern overlay.
+ */
+
+#ogi-host,
+#ogi-report-info {
+    margin-top: 8px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: #ffffff;
+}
+
+#ogi-host {
+    width: 519px;
+    margin-bottom: 6px;
+}
+
+.ogi-summary {
+    color: #9f9f9f;
+    padding: 2px 4px;
+}
+
+.ogi-panel table.header {
+    border-collapse: collapse;
+}
+
+.ogi-panel td.c,
+.ogi-panel th {
+    padding: 2px 4px;
+}
+
+.ogi-actions {
+    text-align: center;
+    padding: 3px;
+}
+
+.ogi-actions a.ogi-action {
+    color: #ff8900;
+    text-decoration: none;
+}
+
+.ogi-actions a.ogi-action:hover {
+    text-decoration: underline;
+}
+
+.ogi-body {
+    padding: 4px;
+}
+
+.ogi-tabs {
+    padding-bottom: 4px;
+    border-bottom: 1px solid #4a4a4a;
+    margin-bottom: 6px;
+}
+
+.ogi-tabs a.ogi-tab,
+.ogi-tabs a.ogi-tab-active {
+    padding: 1px 5px;
+    margin-right: 4px;
+    text-decoration: none;
+}
+
+.ogi-tabs a.ogi-tab {
+    color: #9f9f9f;
+}
+
+.ogi-tabs a.ogi-tab-active {
+    color: #ffffff;
+    background-color: #4a4a4a;
+}
+
+.ogi-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 6px;
+}
+
+.ogi-table th {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    text-align: left;
+    font-weight: normal;
+    padding: 2px 4px;
+    border: 1px solid #1f1f1f;
+}
+
+.ogi-table td {
+    padding: 1px 4px;
+    border: 1px solid #1f1f1f;
+    white-space: nowrap;
+}
+
+.ogi-table tr:nth-child(even) td {
+    background-color: #101010;
+}
+
+.ogi-kv {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.ogi-kv td {
+    padding: 1px 4px;
+    border-bottom: 1px solid #1f1f1f;
+}
+
+.ogi-kv td.ogi-key {
+    color: #9f9f9f;
+    width: 45%;
+}
+
+.ogi-tag {
+    padding: 0 3px;
+}
+
+.ogi-good {
+    color: #00ff00;
+}
+
+.ogi-bad {
+    color: #ff3030;
+}
+
+.ogi-info {
+    color: #00bfff;
+}
+
+.ogi-neutral {
+    color: #c0c0c0;
+}
+
+.ogi-note,
+.ogi-status {
+    color: #c0c0c0;
+    padding: 3px 0;
+}
+
+#ogi-galaxy-note {
+    color: #9f9f9f;
+}
+
+/* Settings form (analyzer tab and the game's Options page). */
+#ogi-options-host {
+    margin-bottom: 8px;
+}
+
+.ogi-settings-block {
+    margin-bottom: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #1f1f1f;
+}
+
+.ogi-check {
+    display: block;
+    padding: 1px 0;
+}
+
+.ogi-check input[type="number"] {
+    width: 62px;
+    background-color: #101010;
+    color: #ffffff;
+    border: 1px solid #4a4a4a;
+}
+
+.ogi-settings select {
+    background-color: #101010;
+    color: #ffffff;
+    border: 1px solid #4a4a4a;
+}
+
+.ogi-export,
+.ogi-import {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 4px;
+    background-color: #101010;
+    color: #c0c0c0;
+    border: 1px solid #4a4a4a;
+    font-family: Consolas, monospace;
+    font-size: 10px;
+}
+
+.ogi-export + .ogi-note {
+    padding: 2px 0;
+}
+
+.ogi-panel button {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    border: 1px solid #1f1f1f;
+    margin-top: 4px;
+    padding: 2px 8px;
+    cursor: pointer;
+}
+
+/* Statistics: point breakdown and history bars. */
+#ogi-stats-host {
+    width: 519px;
+    margin-bottom: 6px;
+}
+
+.ogi-bar {
+    position: relative;
+    height: 13px;
+    margin: 2px 0;
+    background-color: #101010;
+    border: 1px solid #1f1f1f;
+}
+
+.ogi-bar-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #4a4a4a;
+}
+
+.ogi-bar-label {
+    position: relative;
+    padding-left: 3px;
+    line-height: 13px;
+    color: #ffffff;
+}
+
+.ogi-bar.ogi-eco .ogi-bar-fill {
+    background-color: #2f7f2f;
+}
+
+.ogi-bar.ogi-fleet .ogi-bar-fill {
+    background-color: #7f2f2f;
+}
+
+.ogi-bar.ogi-research .ogi-bar-fill {
+    background-color: #2f4f7f;
+}
+
+.ogi-bar.ogi-history .ogi-bar-fill {
+    background-color: #4a4a4a;
+}
+
+/* Inline SVG icon set (lib/icons.js). */
+.ogi-icon {
+    vertical-align: -2px;
+    margin-right: 2px;
+}
+
+/*
+ * The panels are mounted inside <center> (lib/mount.js) so they line up with the
+ * game's own tables, which the 0.84 pages also center inside #content. Only the
+ * block itself is centered: the host is an inline-block and resets the inherited
+ * text alignment, so the game's own `th`/`td.c` rules keep working inside the panel.
+ */
+.ogi-center {
+    text-align: center;
+}
+
+.ogi-center > div {
+    display: inline-block;
+    text-align: left;
+}
+
+/* Build pages: the per-row stepper, the padlock and the plan summary. */
+.ogi-build-td {
+    vertical-align: top;
+    padding-left: 4px;
+    white-space: nowrap;
+}
+
+.ogi-build-cell {
+    font-size: 11px;
+    line-height: 15px;
+}
+
+.ogi-stepper {
+    white-space: nowrap;
+}
+
+.ogi-stepper a.ogi-step,
+.ogi-stepper a.ogi-lock {
+    color: #9f9f9f;
+    text-decoration: none;
+    padding: 0 2px;
+}
+
+.ogi-stepper a.ogi-step:hover,
+.ogi-stepper a.ogi-lock:hover {
+    color: #ffffff;
+}
+
+.ogi-stepper .ogi-step-target {
+    display: inline-block;
+    min-width: 22px;
+    color: #ffffff;
+    text-align: center;
+}
+
+.ogi-stepper a.ogi-lock {
+    margin-left: 4px;
+    color: #ffd700;
+}
+
+.ogi-build-cost {
+    color: #9f9f9f;
+}
+
+.ogi-build-missing {
+    color: #ff6060;
+}
+
+#ogi-plan-host {
+    width: 530px;
+    margin-bottom: 6px;
+}
+
+#ogi-payback-host {
+    width: 530px;
+    margin-bottom: 6px;
+}
+
+/* Profitability: the tile grid of the recommended development. */
+.ogi-payback-controls {
+    padding: 3px 0;
+}
+
+.ogi-payback-rate {
+    color: #ffffff;
+}
+
+.ogi-tiles {
+    display: block;
+    padding: 3px 0;
+}
+
+.ogi-tile {
+    display: inline-block;
+    width: 76px;
+    margin: 2px;
+    padding: 2px;
+    vertical-align: top;
+    text-align: center;
+    background-color: #101010;
+    border: 1px solid #4a4a4a;
+}
+
+.ogi-tile img {
+    display: block;
+    margin: 0 auto;
+}
+
+.ogi-tile-level {
+    color: #ffd700;
+    font-size: 11px;
+}
+
+.ogi-tile-cost,
+.ogi-tile-gain,
+.ogi-tile-payback,
+.ogi-tile-energy {
+    font-size: 10px;
+    line-height: 13px;
+    color: #cfcfcf;
+}
+
+.ogi-tile-payback {
+    color: #9fe89f;
+}
+
+.ogi-tile .ogi-icon {
+    margin-right: 0;
+}
+
+.ogi-tabs .ogi-icon {
+    margin-right: 3px;
+}
+
+.ogi-welcome-list {
+    margin: 4px 0 4px 16px;
+    padding: 0;
+}
+
+.ogi-welcome-list li {
+    padding: 1px 0;
+}
+
+#ogi-welcome-host {
+    width: 519px;
+    margin-bottom: 6px;
+}
+
+#ogi-tooltip .ogi-icon {
+    margin-right: 3px;
+}
+
+/* Fleet events, hostile warning and the galaxy markers. */
+.ogi-alert {
+    border: 1px solid #ff3030;
+    padding: 3px;
+    margin-bottom: 4px;
+    color: #ff6060;
+}
+
+.ogi-galaxy-mark {
+    color: #ff8900;
+    font-size: 10px;
+}
+
+.ogi-mark-fav {
+    color: #ffd700 !important;
+}
+
+.ogi-mark-known {
+    color: #9fe89f;
+}
+
+#ogi-tooltip {
+    position: fixed;
+    z-index: 10000;
+    max-width: 430px;
+    padding: 2px;
+    background-color: #000000;
+    border: 1px solid #4a4a4a;
+    pointer-events: none;
+}
+
+#ogi-tooltip .ogi-table {
+    width: auto;
+}
+
+/* Planet database controls. */
+.ogi-inline {
+    display: inline;
+}
+
+.ogi-note-input {
+    width: 90px;
+    background-color: #101010;
+    color: #ffffff;
+    border: 1px solid #4a4a4a;
+}
+
+#ogi-overview-host,
+#ogi-stats-host {
+    width: 519px;
+    margin-bottom: 6px;
+}
+
+/* Match the width of the game's own table on those pages. */
+#ogi-stats-host {
+    width: 525px;
+}
+
+#ogi-empire-host {
+    width: 750px;
+}
+
+#ogi-host,
+#ogi-fleet-host,
+#ogi-options-host {
+    width: 519px;
+    margin-bottom: 6px;
+}

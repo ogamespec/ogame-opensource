@@ -1,0 +1,160 @@
+/**
+ * OGame Infinity 0.84 — UI helpers.
+ *
+ * The analyzer panel is rendered with the very same markup the 0.84 pages use
+ * (a `<table class="header">` box with `<td class="c">` headers, `th` rows and
+ * plain links), so it looks like a native game page instead of a modern overlay.
+ */
+(function (root) {
+    'use strict';
+
+    const numbers = typeof require === 'function' ? require('./numbers.js') : root.OGI;
+
+    /**
+     * Escape a value for HTML output (galaxy data is player controlled).
+     *
+     * @param {*} value Value.
+     * @returns {string} Escaped text.
+     */
+    function esc(value) {
+        return String(value === null || value === undefined ? '' : value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    /**
+     * Render an amount the way the game does (dots as thousand separators).
+     *
+     * @param {number} value Amount.
+     * @returns {string} Formatted amount.
+     */
+    function num(value) {
+        if (value === null || value === undefined || isNaN(value)) return '-';
+        return numbers.formatNumber(value);
+    }
+
+    /**
+     * Render a table.
+     *
+     * @param {string[]} headers Header cells.
+     * @param {Array<Array<string>>} rows Body rows (already escaped HTML).
+     * @param {object} [options] Options: className.
+     * @returns {string} HTML.
+     */
+    function table(headers, rows, options) {
+        const opt = options || {};
+        const out = [];
+        out.push('<table class="ogi-table' + (opt.className ? ' ' + esc(opt.className) : '') + '">');
+        if (headers && headers.length) {
+            out.push('<tr>');
+            for (const header of headers) out.push('<th>' + esc(header) + '</th>');
+            out.push('</tr>');
+        }
+        for (const row of rows || []) {
+            out.push('<tr>');
+            for (const cell of row) out.push('<td>' + cell + '</td>');
+            out.push('</tr>');
+        }
+        out.push('</table>');
+        return out.join('');
+    }
+
+    /**
+     * Render the frame of the analyzer panel.
+     *
+     * @param {string} title Panel title.
+     * @param {string} bodyHtml Inner HTML (tabs and tables).
+     * @param {object} [options] Options: id, actions (HTML), summary (HTML),
+     *        collapsed (render only the title, the actions and the summary),
+     *        width (pixels, the game uses 519 on most pages, 525 on statistics and
+     *        750 on the empire page).
+     * @returns {string} HTML.
+     */
+    function panel(title, bodyHtml, options) {
+        const opt = options || {};
+        const icons = typeof require === 'function' ? require('./icons.js') : root.OGI;
+        const logo = icons && icons.icon ? icons.icon('planets', { size: 14 }) : '';
+        // Matching the width of the game's own table on that page keeps the panel
+        // flush with the content below it.
+        const width = opt.width || 519;
+        const out = [];
+        out.push('<div class="ogi-panel" id="' + esc(opt.id || 'ogi-panel') + '">');
+        out.push('<table class="header" width="' + width + '"><tr><td class="c" colspan="2">');
+        out.push(logo + ' <b>OGame Infinity 0.84</b> — ' + esc(title));
+        out.push('</td></tr>');
+        if (opt.actions) {
+            out.push('<tr><td colspan="2" class="ogi-actions">' + opt.actions + '</td></tr>');
+        }
+        if (opt.summary) {
+            out.push('<tr><td colspan="2" class="ogi-summary">' + opt.summary + '</td></tr>');
+        }
+        if (!opt.collapsed) {
+            out.push('<tr><td colspan="2" class="ogi-body">' + bodyHtml + '</td></tr>');
+        }
+        out.push('</table>');
+        out.push('</div>');
+        return out.join('');
+    }
+
+    /**
+     * Render a tab bar.
+     *
+     * @param {Array<{id: string, title: string, icon: (string|undefined)}>} tabs Tabs.
+     * @param {string} active Active tab id.
+     * @returns {string} HTML.
+     */
+    function tabs(tabs, active) {
+        const icons = typeof require === 'function' ? require('./icons.js') : root.OGI;
+        const out = ['<div class="ogi-tabs">'];
+        for (const tab of tabs) {
+            const isActive = tab.id === active;
+            const glyph = tab.icon && icons && icons.icon ? icons.icon(tab.icon, { size: 13 }) : '';
+            out.push('<a href="#" class="' + (isActive ? 'ogi-tab-active' : 'ogi-tab') +
+                '" data-ogi-tab="' + esc(tab.id) + '">' + glyph + esc(tab.title) + '</a>');
+        }
+        out.push('</div>');
+        return out.join('');
+    }
+
+    /**
+     * Render a two column "label: value" list in the style of the game's info
+     * tables.
+     *
+     * @param {Array<Array<string>>} rows Pairs of already rendered HTML cells.
+     * @returns {string} HTML.
+     */
+    function keyValue(rows) {
+        const out = ['<table class="ogi-kv">'];
+        for (const row of rows || []) {
+            out.push('<tr><td class="ogi-key">' + row[0] + '</td><td>' + row[1] + '</td></tr>');
+        }
+        out.push('</table>');
+        return out.join('');
+    }
+
+    /**
+     * Render a small colored tag (win/loss, expedition type, ...).
+     *
+     * @param {string} text Text.
+     * @param {string} kind Style kind (good, bad, neutral, info).
+     * @returns {string} HTML.
+     */
+    function tag(text, kind) {
+        return '<span class="ogi-tag ogi-' + esc(kind || 'neutral') + '">' + esc(text) + '</span>';
+    }
+
+    const api = {
+        esc: esc,
+        num: num,
+        table: table,
+        panel: panel,
+        tabs: tabs,
+        keyValue: keyValue,
+        tag: tag,
+    };
+
+    root.OGI = Object.assign(root.OGI || {}, api);
+    if (typeof module === 'object' && module.exports) module.exports = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
