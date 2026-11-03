@@ -67,7 +67,7 @@
 <tr><td> <b>Q</b> noattack_until</td><td>INT UNSIGNED</td><td>Когда заканчивается запрет на атаки time()</td></tr>
 <tr><td>lastlogin</td><td>INT UNSIGNED</td><td>Последняя дата входа в игру</td></tr>
 <tr><td>lastclick</td><td>INT UNSIGNED</td><td>Последний щелчок мышкой, для определения активности игрока</td></tr>
-<tr><td>ip_addr</td><td>CHAR(15)</td><td>IP адрес пользователя</td></tr>
+<tr><td>ip_addr</td><td>VARCHAR(45)</td><td>IP адрес пользователя</td></tr>
 <tr><td>validated</td><td>INT</td><td>Пользователь активирован. Если пользователь не активирован, то ему запрещено посылать игровые сообщения и заявки в альянсы.</td></tr>
 <tr><td>validatemd</td><td>CHAR(32)</td><td>Код активации</td></tr>
 <tr><td>hplanetid</td><td>INT</td><td>Порядковый номер Главной планеты</td></tr>

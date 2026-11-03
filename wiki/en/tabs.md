@@ -110,7 +110,7 @@ In other words - there is no reason to worry that the tables are organized a bit
 |**Q** noattack_until|INT UNSIGNED|When the ban on attacks ends, time()|
 |lastlogin|INT UNSIGNED|Last time of entry into the game, time() | 
 |lastclick|INT UNSIGNED|Last click, to determine the player's activity, time() | 
-|ip_addr|CHAR(15)|user IP address | 
+|ip_addr|VARCHAR(45)|user IP address | 
 |validated|INT|User is activated. If the user is not activated, they are not allowed to send game messages and applications to alliances. | 
 |validatemd|CHAR(32)|Activation code | 
 |hplanetid|INT|Number of the Home Planet | 
@@ -447,7 +447,7 @@ Message types (pm):
 |Column|Type|Description|
 |---|---|---|
 |log_id|INT AUTO_INCREMENT PRIMARY KEY| | 
-|ip|CHAR(16)| | 
+|ip|VARCHAR(45)| | 
 |user_id|INT| | 
 |reg|INT| | 
 |date|INT UNSIGNED| |

@@ -322,11 +322,11 @@ class DeepSpaceHorrorTest extends TestCase
         global $GlobalUni;
         $GlobalUni = array('galaxies' => 9, 'systems' => 499);
 
-        // g=1 (odd -> moving backwards), p=15 -> next position wraps to p=1,
-        // system drops below 1 -> galaxy 2 starts moving forward from s=1.
+        // g=1 (odd -> moving forward), p=15 -> next position wraps to p=1 and
+        // the system advances to s=2 inside the same galaxy.
         $mod = $this->deterministicHorror(array());
         $coords = $this->invokePrivate($mod, 'DeterminePortalCoords', array(GID_LEVI_GUARDIAN, array('g' => 1, 's' => 1, 'p' => 15)));
-        $this->assertSame(array('g' => 2, 's' => 1, 'p' => 1), $coords);
+        $this->assertSame(array('g' => 1, 's' => 2, 'p' => 1), $coords);
     }
 
     public function testGuardianMoveReversesDirectionInEvenGalaxy(): void
@@ -334,11 +334,11 @@ class DeepSpaceHorrorTest extends TestCase
         global $GlobalUni;
         $GlobalUni = array('galaxies' => 9, 'systems' => 499);
 
-        // g=2 (even -> moving forward), p=15 at the last system -> galaxy 3
-        // (odd) starts moving backwards from the last system s=499.
+        // g=2 (even -> moving backwards), p=15 at the first system -> the system
+        // drops below 1, so galaxy 3 (odd) starts moving forward from s=1.
         $mod = $this->deterministicHorror(array());
-        $coords = $this->invokePrivate($mod, 'DeterminePortalCoords', array(GID_LEVI_GUARDIAN, array('g' => 2, 's' => 499, 'p' => 15)));
-        $this->assertSame(array('g' => 3, 's' => 499, 'p' => 1), $coords);
+        $coords = $this->invokePrivate($mod, 'DeterminePortalCoords', array(GID_LEVI_GUARDIAN, array('g' => 2, 's' => 1, 'p' => 15)));
+        $this->assertSame(array('g' => 3, 's' => 1, 'p' => 1), $coords);
     }
 
     public function testGuardianMoveWrapsGalaxies(): void
@@ -346,11 +346,11 @@ class DeepSpaceHorrorTest extends TestCase
         global $GlobalUni;
         $GlobalUni = array('galaxies' => 3, 'systems' => 499);
 
-        // g=3 (odd -> moving backwards), first system: crossing s=0 wraps the
-        // galaxy to 1 and the guardian keeps moving backwards from s=499.
+        // g=3 (odd -> moving forward), last system: crossing s=499 wraps the
+        // galaxy to 1, which keeps moving forward from s=1.
         $mod = $this->deterministicHorror(array());
-        $coords = $this->invokePrivate($mod, 'DeterminePortalCoords', array(GID_LEVI_GUARDIAN, array('g' => 3, 's' => 1, 'p' => 15)));
-        $this->assertSame(array('g' => 1, 's' => 499, 'p' => 1), $coords);
+        $coords = $this->invokePrivate($mod, 'DeterminePortalCoords', array(GID_LEVI_GUARDIAN, array('g' => 3, 's' => 499, 'p' => 15)));
+        $this->assertSame(array('g' => 1, 's' => 1, 'p' => 1), $coords);
     }
 
     /**
@@ -363,8 +363,8 @@ class DeepSpaceHorrorTest extends TestCase
         $GlobalUni = array('galaxies' => 3, 'systems' => 499);
 
         $mod = $this->deterministicHorror(array());
-        $coords = $this->invokePrivate($mod, 'DeterminePortalCoords', array(GID_LEVI_GUARDIAN, array('g' => 3, 's' => 499, 'p' => 15)));
-        $this->assertSame(array('g' => 3, 's' => 498, 'p' => 1), $coords);
+        $coords = $this->invokePrivate($mod, 'DeterminePortalCoords', array(GID_LEVI_GUARDIAN, array('g' => 2, 's' => 499, 'p' => 15)));
+        $this->assertSame(array('g' => 2, 's' => 498, 'p' => 1), $coords);
     }
 
     /**

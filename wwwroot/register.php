@@ -46,14 +46,17 @@ include ('header.tpl');
 
     require_once "uni.php";
 
-    if ( key_exists("linkuni", $_GET) ) echo "registerForm.universe.value = \"".$UniList[$_GET['linkuni']]['uniurl']."\";\n";
+    // The values below are echoed into JavaScript string literals, so they
+    // must be encoded for the JS context (json_encode produces a safely
+    // quoted string literal).
+    if ( key_exists("linkuni", $_GET) && isset($UniList[$_GET['linkuni']]['uniurl']) ) echo "registerForm.universe.value = ".json_encode((string)$UniList[$_GET['linkuni']]['uniurl']).";\n";
     if ( key_exists("errorCode", $_GET) )
     {
-        echo "document.registerForm.character.value = '".$_GET['character']."';\n";
-        echo "document.registerForm.email.value = '".$_GET['email']."';\n";
-        echo "document.registerForm.universe.value = '".$_GET['universe']."';\n";
+        echo "document.registerForm.character.value = ".json_encode((string)($_GET['character'] ?? '')).";\n";
+        echo "document.registerForm.email.value = ".json_encode((string)($_GET['email'] ?? '')).";\n";
+        echo "document.registerForm.universe.value = ".json_encode((string)($_GET['universe'] ?? '')).";\n";
         if ( !$_GET['agb'] ) echo "showInfo (\"204\");\n";
-        if ( $_GET['errorCode'] ) echo "printMessage (\"".$_GET['errorCode']."\");\n";
+        if ( $_GET['errorCode'] ) echo "printMessage (".json_encode((string)$_GET['errorCode']).");\n";
     }
     else echo "document.registerForm.character.focus();\n";
 ?>
