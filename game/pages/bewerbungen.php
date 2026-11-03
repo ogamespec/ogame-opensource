@@ -25,13 +25,27 @@ class Bewerbungen extends Page {
 
         if ( method () === "POST" )
         {
+            // Accept/reject are write operations on the alliance: require the
+            // application-management rank right and check that the application
+            // belongs to the current alliance (applications of other alliances
+            // must not be touched by guessing app ids).
+            $myrank = LoadRank ( $this->ally['ally_id'], $GlobalUser['allyrank'] );
+            $may_edit = ($myrank !== null && $myrank['rights'] & ARANK_W_APPLY);
+
             if ( $_POST['aktion'] === loca("ALLY_APPA_ACCEPT") && $this->show > 0 )
             {
                 $app = LoadApplication ($this->show);
+                if ( !$may_edit || $app === false || $app['ally_id'] != $this->ally['ally_id'] ) {
+                    MyGoto ("bewerbungen");
+                }
                 $ally_id = $this->ally['ally_id'];
                 $player_id = $app['player_id'];
                 $newcomer = LoadUser ($player_id);
                 if ($newcomer == null) {
+                    MyGoto ("bewerbungen");
+                }
+                // The applicant may have joined another alliance since applying.
+                if ( intval($newcomer['ally_id']) != 0 ) {
                     MyGoto ("bewerbungen");
                 }
 
@@ -61,6 +75,9 @@ class Bewerbungen extends Page {
             if ( $_POST['aktion'] === loca("ALLY_APPA_REJECT") && $this->show > 0 )
             {
                 $app = LoadApplication ($this->show);
+                if ( !$may_edit || $app === false || $app['ally_id'] != $this->ally['ally_id'] ) {
+                    MyGoto ("bewerbungen");
+                }
                 $player_id = $app['player_id'];
                 $newcomer = LoadUser ($player_id);
                 RemoveApplication ( $this->show );

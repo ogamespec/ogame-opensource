@@ -20,6 +20,14 @@ class Trader extends Page {
 
         $dm = $GlobalUser['dm'] + $GlobalUser['dmfree'];
 
+        // The merchant only trades on regular planets (storage areas are not
+        // computed for moons), so nothing is exchanged or summoned there.
+        if ( $aktplanet['type'] != PTYP_PLANET ) {
+            $PageError = loca("TRADER_NOT_FOUND") . "<br>";
+            $this->offer_id = 0;
+            return true;
+        }
+
         // POST request processing.
         if ( method () === "POST" ) {
             // Exchange resources.
@@ -119,14 +127,17 @@ class Trader extends Page {
             }
             // Call a (new) merchant
             else {
-                if ( $dm < TRADER_DM ) {
-                    $this->not_enough = true;
-                    $PageError = loca("TRADER_ERROR_DM") . "<br>";
+                if ( key_exists ( 'call_trader', $_POST) ) {
+                    if ( $dm < TRADER_DM ) {
+                        $this->not_enough = true;
+                        $PageError = loca("TRADER_ERROR_DM") . "<br>";
+                    }
+                    else {
+                        $this->not_enough = false;
+                        $this->CallNewTrader ();
+                    }
                 }
-                else {
-                    $this->not_enough = false;
-                    $this->CallNewTrader ();
-                }
+                else $PageError = loca("TRADER_NOT_FOUND") . "<br>";
             }
         }
 

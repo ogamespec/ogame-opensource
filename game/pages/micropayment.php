@@ -31,18 +31,26 @@ class Micropayment extends Page {
                 else {
                     if ( $type >= USER_OFFICER_COMMANDER && $type <= USER_OFFICER_TECHNOCRATE ) {
                         // Списать ТМ.
-                        if ( $GlobalUser['dm'] >= $required ) $GlobalUser['dm'] -= $required;
+                        $newdm = $GlobalUser['dm'];
+                        $newfree = $GlobalUser['dmfree'];
+                        if ( $newdm >= $required ) $newdm -= $required;
                         else {
-                            $GlobalUser['dmfree'] -= $required - $GlobalUser['dm'];
-                            $GlobalUser['dm'] = 0;
+                            $newfree -= $required - $newdm;
+                            $newdm = 0;
                         }
 
-                        $query = "UPDATE ".$db_prefix."users SET dm = '".$GlobalUser['dm']."', dmfree = '".$GlobalUser['dmfree']."' WHERE player_id = " . $GlobalUser['player_id'];
+                        // The balance check and the deduction happen in one statement, so
+                        // two concurrent requests cannot both pass the check.
+                        $query = "UPDATE ".$db_prefix."users SET dm = ".intval($newdm).", dmfree = ".intval($newfree)." WHERE player_id = ".$GlobalUser['player_id']." AND (dm + dmfree) >= ".$required;
                         dbquery ( $query );
 
-                        RecruitOfficer ( $GlobalUser['player_id'], $type, $days * 24 * 60 * 60 );
-                        
-                        $PageMessage = loca ("PREM_OK") . "<br>";
+                        if ( dbaffected () === 1 ) {
+                            $GlobalUser['dm'] = $newdm;
+                            $GlobalUser['dmfree'] = $newfree;
+                            RecruitOfficer ( $GlobalUser['player_id'], $type, $days * 24 * 60 * 60 );
+                            $PageMessage = loca ("PREM_OK") . "<br>";
+                        }
+                        else $PageError = loca ("PREM_NOTENOUGH") . "<br>";
                     }
                 }
             }

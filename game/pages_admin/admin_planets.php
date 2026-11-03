@@ -25,6 +25,18 @@ class Admin_Planets extends Page {
                 //print_r ($_POST);
                 //echo "<hr/>";
 
+                $old = LoadPlanetById ($cp);
+
+                // Do not move a planet (and its moon) onto a slot that is
+                // already occupied by another planet.
+                $coord_taken = false;
+                if ( $old !== null && key_exists('g', $_POST) && key_exists('s', $_POST) && key_exists('p', $_POST) ) {
+                    $ng = abs (intval ($_POST['g']));
+                    $ns = abs (intval ($_POST['s']));
+                    $np = abs (intval ($_POST['p']));
+                    if ( ($ng != $old['g'] || $ns != $old['s'] || $np != $old['p']) && HasPlanet ($ng, $ns, $np) ) $coord_taken = true;
+                }
+
                 $param = array_merge ( 
                     $buildmap, $defmap, $fleetmap, 
                     array ( GID_RC_METAL, GID_RC_CRYSTAL, GID_RC_DEUTERIUM, 'g', 's', 'p', 'diameter', 'type', 'temp',
@@ -39,6 +51,9 @@ class Admin_Planets extends Page {
                         }
                         else {
                             $val = abs(intval($_POST[$p]));
+                            if ( $p === 'type' && $old !== null && GetPlanetType ( array ( 'type' => $val ) ) !== GetPlanetType ( $old ) ) {
+                                continue;    // The planet may only keep its own type family.
+                            }
                             if (is_int($p) && IsBuilding($p)) {
                                 $val = min (MAX_BUILDINGS_LEVEL, $val);
                             }
@@ -55,11 +70,13 @@ class Admin_Planets extends Page {
                     $user = LoadUser ($planet['owner_id']);
                     if ( $user !== null && $user['hplanetid'] != $cp)
                     {
+                        $moon_id = PlanetHasMoon ($cp);        // Do not leave the moon in orbit of nothing.
+                        if ( $moon_id ) DestroyPlanet ($moon_id);
                         DestroyPlanet ($cp);
                         $_GET['cp'] = $user['hplanetid'];        // redirect to the home planet.
                     }
                 }
-                else {                                        // Update planet data
+                else if ( ! $coord_taken ) {                  // Update planet data
 
                     $moon_id = PlanetHasMoon ( $cp );        // Move the moon beyond the planet.
                     if ( $moon_id )
@@ -86,15 +103,16 @@ class Admin_Planets extends Page {
                 }
                 $query = '';
                 $result = null;
+                $searchtext = addslashes ((string) $_POST['searchtext']);
                 if ( $searchtype === "playername") {
-                    $query = "SELECT player_id FROM ".$db_prefix."users WHERE oname LIKE '".$_POST['searchtext']."%'";
+                    $query = "SELECT player_id FROM ".$db_prefix."users WHERE oname LIKE '".$searchtext."%'";
                     $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = ANY ($query);";
                 }
                 else if ( $searchtype === "planetname") {
-                    $query = "SELECT * FROM ".$db_prefix."planets WHERE name LIKE '".$_POST['searchtext']."%';";
+                    $query = "SELECT * FROM ".$db_prefix."planets WHERE name LIKE '".$searchtext."%';";
                 }
                 else if ( $searchtype === "allytag") {
-                    $query = "SELECT ally_id FROM ".$db_prefix."ally WHERE tag LIKE '".$_POST['searchtext']."%'";
+                    $query = "SELECT ally_id FROM ".$db_prefix."ally WHERE tag LIKE '".$searchtext."%'";
                     $query = "SELECT player_id FROM ".$db_prefix."users WHERE ally_id <> 0 AND ally_id = ANY ($query)";
                     $query = "SELECT * FROM ".$db_prefix."planets WHERE owner_id = ANY ($query);";
                 }

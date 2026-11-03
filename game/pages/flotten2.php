@@ -198,14 +198,21 @@ class Flotten2 extends Page {
             {
                 echo "<input type=\"hidden\" name=\"union2\" value=\"0\" >";
                 $now = time ();
+                // Number the countdown boxes with a running counter ($n):
+                // t() expects exactly the ids bxx1..bxx(anz), but rows whose
+                // fleet no longer belongs to the union are skipped here, so
+                // the enumeration key ($i) would leave holes and break every
+                // countdown.
+                $n = 0;
                 foreach ( $unions as $i=>$union )
                 {
                     $fleet_obj = LoadFleet ( $union['fleet_id'] );
                     if ( $fleet_obj['union_id'] != $union['union_id'] ) continue;
+                    $n++;
                     $queue = GetFleetQueue ( $union['fleet_id'] );
                     $target = LoadPlanetById ( $fleet_obj['target_planet'] );
                     echo "  <tr height=\"20\">";
-                    echo "<th><div id='bxx".($i+1)."' title='".max($queue['end']-$now, 0)."'star='".$queue['end']."'></div></th>";
+                    echo "<th><div id='bxx".$n."' title='".max($queue['end']-$now, 0)."'star='".$queue['end']."'></div></th>";
                     echo "<th><a href=\"javascript:setTarget(".$target['g'].",".$target['s'].",".$target['p'].",".GetPlanetType($target)."); setUnion(".$union['union_id']."); shortInfo()\">";
                     echo htmlspecialchars($union['name'])." [".$target['g'].":".$target['s'].":".$target['p']."]</a></th></tr>\n";
                 }

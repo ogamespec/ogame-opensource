@@ -343,7 +343,10 @@ function CanBuild (array $user, array $planet, int $id, int $lvl, bool $destroy,
         else if ( $planet[$id] <= 0 ) return loca_lang("BUILD_ERROR_NO_SUCH_BUILDING", $user['lang']);
     }
 
-    if ($planet[$id] >= MAX_BUILDINGS_LEVEL) return loca_lang("BUILD_ERROR_MAX_LEVEL", $user['lang']);
+    // The level cap applies only to construction: demolition of a max-level
+    // building must stay possible, so compare the target level, not the
+    // current one (a queued build can otherwise slip past the cap).
+    if ( !$destroy && $lvl > MAX_BUILDINGS_LEVEL) return loca_lang("BUILD_ERROR_MAX_LEVEL", $user['lang']);
 
     $info = array ();
     $info['id'] = $id;
@@ -531,6 +534,12 @@ function BuildDeque ( array $user, int $planet_id, int $listid ) : string
     if ( dbrows ($result) ) {
         $row = dbarray ($result);
 
+        // Only the owner of the planet may cancel its construction.
+        loca_add ( "build", $user['lang'] );
+        $planet = LoadPlanetById ( $row['planet_id'] );
+        if ( $planet == null || $planet['type'] >= PTYP_DF || $planet['owner_id'] != $user['player_id'] )
+            return loca_lang("BUILD_ERROR_INVALID_PLANET", $user['lang']);
+
         $id = $row['tech_id'];
         $lvl = $row['level'];
         $planet_id = $row['planet_id'];
@@ -552,7 +561,6 @@ function BuildDeque ( array $user, int $planet_id, int $listid ) : string
         $query = "UPDATE ".$db_prefix."buildqueue SET level = level - 1 WHERE tech_id = ".$row['tech_id']." AND planet_id = $planet_id AND list_id > " . $row['list_id'];
         dbquery ($query);
 
-        $planet = LoadPlanetById ( $planet_id );
         UserLog ( $planet['owner_id'], "BUILD", va(loca_lang("DEBUG_LOG_BUILD_CANCEL", $GlobalUni['lang']), loca("NAME_".$id), $lvl, $listid, $planet_id)  );
 
         // Remove event handler and construction from the queue
@@ -700,6 +708,10 @@ function AddShipyard (int $player_id, int $planet_id, int $gid, int $value, int 
     global $fleetmap;
     global $defmap;
     global $resourcemap;
+
+    // A shipyard or nanite factory under construction blocks the shipyard.
+    $bqueue = dbarray ( GetBuildQueue ( $planet_id ) );
+    if ( $bqueue && ( $bqueue['tech_id'] == GID_B_SHIPYARD || $bqueue['tech_id'] == GID_B_NANITES ) ) return false;
 
     if ( in_array ( $gid, $defmap ) ) UserLog ( $player_id, "DEFENSE", va(loca_lang("DEBUG_LOG_DEFENSE", $GlobalUni['lang']), loca("NAME_$gid"), $value, $planet_id)  );
     else UserLog ( $player_id, "SHIPYARD", va(loca_lang("DEBUG_LOG_SHIPYARD", $GlobalUni['lang']), loca("NAME_$gid"), $value, $planet_id)  );
@@ -1106,7 +1118,8 @@ function AddAllowNameEvent (int $player_id) : void
     {
         $now = time ();
         $when = $now + 7 * 24 * 60 * 60;
-        $id = AddQueue ($player_id, QTYP_ALLOW_NAME, 0, 0, 0, $now, $when, QUEUE_PRIO_LOWEST);
+        // AddQueue's 7th argument is a duration: end = now + seconds.
+        $id = AddQueue ($player_id, QTYP_ALLOW_NAME, 0, 0, 0, $now, 7 * 24 * 60 * 60, QUEUE_PRIO_LOWEST);
         $query = "UPDATE ".$db_prefix."users SET name_changed = 1, name_until = $when WHERE player_id = $player_id";
         dbquery ($query);
     }
@@ -1187,7 +1200,8 @@ function AddChangeEmailEvent (int $player_id) : int
 
     $now = time ();
     $when = $now + 7 * 24 * 60 * 60;
-    $id = AddQueue ($player_id, QTYP_CHANGE_EMAIL, 0, 0, 0, $now, $when, QUEUE_PRIO_LOWEST);
+    // AddQueue's 7th argument is a duration: end = now + seconds.
+    $id = AddQueue ($player_id, QTYP_CHANGE_EMAIL, 0, 0, 0, $now, 7 * 24 * 60 * 60, QUEUE_PRIO_LOWEST);
     return $id;
 }
 
@@ -1419,8 +1433,13 @@ function AddCleanDebrisEvent () : void
 function Queue_CleanDebris_End (array $queue) : void
 {
     global $db_prefix;
-    $query = "SELECT target_planet FROM ".$db_prefix."fleet WHERE mission = ".FTYP_RECYCLE." OR mission = ".(FTYP_RECYCLE+FTYP_RETURN);
-    $query = "DELETE FROM ".$db_prefix."planets WHERE (type=".PTYP_DF." AND `".GID_RC_METAL."`=0 AND `".GID_RC_CRYSTAL."`=0) AND planet_id <> ALL ($query)";
+    // Fleets flying to a debris field (outbound / returning recyclers).
+    $query = "SELECT target_planet FROM ".$db_prefix."fleet WHERE (mission = ".FTYP_RECYCLE." OR mission = ".(FTYP_RECYCLE+FTYP_RETURN).") AND target_planet IS NOT NULL";
+    // NOT IN is used instead of <> ALL: it is portable to both MySQL and the
+    // SQLite backend used by the test suite (like the sibling CleanFarspace).
+    // A NULL planet id inside the subquery would make NOT IN evaluate to NULL
+    // (nothing deleted), so rows with a NULL planet id are excluded explicitly.
+    $query = "DELETE FROM ".$db_prefix."planets WHERE (type=".PTYP_DF." AND `".GID_RC_METAL."`=0 AND `".GID_RC_CRYSTAL."`=0) AND planet_id NOT IN ($query)";
     dbquery ( $query );
     RemoveQueue ( $queue['task_id'] );
     AddCleanDebrisEvent ();
@@ -1471,6 +1490,12 @@ function Queue_CleanPlanets_End (array $queue) : void
         $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = $planet_id AND mission < ".FTYP_RETURN.";";
         $fleet_result = dbquery ( $query );
         $fleets = dbrows ($fleet_result);
+
+        // Keep the phantom of a colonization that is still in flight: the
+        // arrival handler replaces it with the real colony, and aborting it
+        // here would silently cancel a legitimate (possibly long) flight.
+        if ( $planet['type'] == PTYP_COLONY_PHANTOM && $fleets > 0 ) continue;
+
         while ( $fleets-- )
         {
             $fleet_obj = dbarray ( $fleet_result );
@@ -1531,6 +1556,17 @@ function Queue_CleanPlayers_End (array $queue) : void
     // Remove players who have been inactive for more than 35 days. Inactive bots and players with purchased DM will not be deleted.
     $when = $queue['end'] - 35*24*60*60;
     $query = "SELECT * FROM ".$db_prefix."users WHERE lastclick < $when AND admin < 1 AND lastclick <> 0 AND dm = 0";
+    $result = dbquery ( $query );
+    $rows = dbrows ( $result );
+    while ($rows-- )
+    {
+        $user = dbarray ( $result );
+        if ( !IsBot ($user['player_id']) ) RemoveUser ( $user['player_id'], $queue['end'] );
+    }
+
+    // Remove players who have registered but never activated their account within 3 days. Bots are not deleted.
+    $when = $queue['end'] - 3*24*60*60;
+    $query = "SELECT * FROM ".$db_prefix."users WHERE validated = 0 AND lastclick = 0 AND admin < 1 AND regdate < $when";
     $result = dbquery ( $query );
     $rows = dbrows ( $result );
     while ($rows-- )

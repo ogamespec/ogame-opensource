@@ -51,7 +51,7 @@ function Error (string $text) : never
     echo "<br /><br />\n";
     echo "<font color=\"#FF0000\">".loca_lang("DEBUG_ERROR", $loca_lang)."</font> - $text\n";
     echo "<br /><br />\n";
-    echo BackTrace() . "<br /><br />\n";
+    if ( !empty($GlobalUser['debug']) ) echo BackTrace() . "<br /><br />\n";
     echo loca_lang("DEBUG_ERROR_INFO1", $loca_lang) . "<br/><br/>" . loca_lang("DEBUG_ERROR_INFO2", $loca_lang) . "\n";
     echo "<br /><br />\n";
     echo "Error-ID: $id</b></font></center>\n";
@@ -102,7 +102,7 @@ function BackTrace () : string
         $file = isset($v['file']) ? $v['file'] : '';
         $line = isset($v['line']) ? $v['line'] : '';
         $function = $v['function'];
-        $file=substr($file,1+strrpos($file,"/")); 
+        $file = basename ( $file );
         if($file=="db.php")continue; // the db object 
         $trace.=str_repeat("&nbsp;",++$sp); //spaces(++$sp); 
         $trace.="file=$file, line=$line, function=$function<br>";

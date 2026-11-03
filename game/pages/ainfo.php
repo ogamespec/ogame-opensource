@@ -25,10 +25,12 @@ else {
 
 <table width=519>
 <tr><td class=c colspan=2><?=loca("AINFO_INFO");?></td></tr><?php
-    if ($ally && $ally['imglogo'] !== "") 
+    if ($ally)
     {
-        echo "<tr><th colspan=2><img src=\"/game/img/preload.gif\" class=\"reloadimage\" title=\"pic.php?url=".htmlspecialchars($ally['imglogo'] ?? '')."\"></td></tr>\n";
-    }
+        if ($ally['imglogo'] !== "") 
+        {
+            echo "<tr><th colspan=2><img src=\"/game/img/preload.gif\" class=\"reloadimage\" title=\"pic.php?url=".htmlspecialchars($ally['imglogo'] ?? '')."\"></td></tr>\n";
+        }
 ?><tr><th><?=loca("AINFO_TAG");?></th><th><?=htmlspecialchars($ally['tag']);?><?php
     if ( $now < $ally['tag_until'] ) echo " (".loca("AINFO_PREV")." ".htmlspecialchars($ally['old_tag']).")";
 ?></th></tr>
@@ -39,4 +41,13 @@ else {
 <tr><th colspan=2 height=100><?=bb($ally['exttext']);?></th></tr>
 <tr><th><?=loca("AINFO_HOMEPAGE");?></th><th>
 <a href="redir.php?url=<?=htmlspecialchars($ally['homepage']);?>" target="_blank"><?=htmlspecialchars($ally['homepage']);?></a></th></tr>
+<?php
+    }
+    else
+    {
+?>
+<tr><th colspan=2 height=100><?=loca("AINFO_NOT_FOUND");?></th></tr>
+<?php
+    }
+?>
 </table>

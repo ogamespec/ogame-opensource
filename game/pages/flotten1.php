@@ -23,20 +23,30 @@ class Flotten1 extends Page {
                 $fleet_id = intval ($_POST['order_return']);
                 $fleet_obj = LoadFleet ( $fleet_id );
                 if (  ($fleet_obj['owner_id'] == $GlobalUser['player_id']) &&
-                      ($fleet_obj['mission'] < FTYP_RETURN || $fleet_obj['mission'] > FTYP_ORBITING )  )
+                      ($fleet_obj['mission'] < FTYP_RETURN || $fleet_obj['mission'] == (FTYP_ACS_HOLD + FTYP_ORBITING) )  )
                     RecallFleet ( $fleet_id );
             }
 
             if ( key_exists ( 'union_name', $_POST) && $GlobalUni['acs'] > 0 ) {
                 $fleet_id = intval ($_POST['flotten']);
-                $this->union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
-                RenameUnion ( $this->union_id, $_POST['union_name'] );    // rename
+                $fleet_obj = LoadFleet ($fleet_id);
+                if ( $fleet_obj != null && $fleet_obj['owner_id'] == $GlobalUser['player_id'] ) {    // only the owner may rename the union of their fleet
+                    $this->union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
+                    $union = LoadUnion ($this->union_id);
+                    if ( $union != null && IsPlayerInUnion ($GlobalUser['player_id'], $union) )
+                        RenameUnion ( $this->union_id, $_POST['union_name'] );    // rename
+                }
             }
 
             if ( key_exists ( 'user_name', $_POST) && $GlobalUni['acs'] > 0 ) {
                 $fleet_id = intval ($_POST['flotten']);
-                $this->union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
-                $PageError = AddUnionMember ( $this->union_id, $_POST['user_name'] );    // add player
+                $fleet_obj = LoadFleet ($fleet_id);
+                if ( $fleet_obj != null && $fleet_obj['owner_id'] == $GlobalUser['player_id'] ) {    // only the owner may invite players to their fleet's union
+                    $this->union_id = CreateUnion ($fleet_id, "KV" . $fleet_id);
+                    $union = LoadUnion ($this->union_id);
+                    if ( $union != null && IsPlayerInUnion ($GlobalUser['player_id'], $union) )
+                        $PageError = AddUnionMember ( $this->union_id, $_POST['user_name'] );    // add player
+                }
             }
         }
 
@@ -153,7 +163,7 @@ class Flotten1 extends Page {
                                  </form>
                                 <?php
                             }
-                            if ( $fleet['mission'] < FTYP_RETURN || $fleet['mission'] > FTYP_ORBITING ) {
+                            if ( $fleet['mission'] < FTYP_RETURN || $fleet['mission'] == (FTYP_ACS_HOLD + FTYP_ORBITING) ) {
                                 ?>
                                  <form action="index.php?page=flotten1&session=<?php echo $session;?>" method="POST">
                                     <input type="hidden" name="order_return" value="<?php echo $fleet['fleet_id'];?>" />

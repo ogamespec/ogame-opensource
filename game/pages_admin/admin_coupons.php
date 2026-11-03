@@ -33,7 +33,8 @@ class Admin_Coupons extends Page {
                 $darkmatter = intval ( $_POST['darkmatter'] );
                 $periodic = intval ( $_POST['periodic'] );
 
-                AddQueue (USER_SPACE, QTYP_COUPON, $darkmatter, ($inactive_days << 16) | $ingame_days, $periodic, $now, (int) $end, QUEUE_PRIO_COUPON);
+                // AddQueue's 7th argument is a duration: end = now + seconds.
+                AddQueue (USER_SPACE, QTYP_COUPON, $darkmatter, ($inactive_days << 16) | $ingame_days, $periodic, $now, (int) max (0, (int) $end - $now), QUEUE_PRIO_COUPON);
             }
         }
 
