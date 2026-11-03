@@ -9,8 +9,9 @@ class Admin_Broadcast extends Page {
     public function controller () : bool {
         global $GlobalUser;
 
-        // POST request processing.
-        if ( method () === "POST" )
+        // POST request processing. Broadcasting to all players is a global
+        // action, so only full administrators may use it.
+        if ( method () === "POST" && $GlobalUser['admin'] >= USER_TYPE_ADMIN )
         {
             $cat = intval($_POST['cat']);
             $subj = $_POST['subj'];

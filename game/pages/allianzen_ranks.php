@@ -52,6 +52,12 @@ function PageAlly_Ranks () : void
         $rank_id = intval($_GET['d']);
         if ( ! ($rank_id == 0 || $rank_id == 1)  )        // Founder and Newbie ranks will not be deleted.
         {
+            // Reassign members holding the deleted rank to the default
+            // "Newbie" rank (1) first; otherwise they keep a dangling
+            // allyrank that no longer exists in allyranks (LoadRank returns
+            // null and they silently lose every rank right).
+            $holders = LoadUsersWithRank ( $ally['ally_id'], $rank_id );
+            while ( $holder = dbarray ($holders) ) SetUserRank ( intval($holder['player_id']), 1 );
             RemoveRank ( $ally['ally_id'], $rank_id );
         }
     }

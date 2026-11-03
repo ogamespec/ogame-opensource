@@ -241,14 +241,15 @@ function BotBuildFleet (int $obj_id, int $n) : int
     if ($user == null) return 0;
     $aktplanet = LoadPlanetById ( $user['aktplanet'] );
     if ($aktplanet == null) return 0;
-    $res = AddShipyard ($user['player_id'], $user['aktplanet'], $obj_id, $n, 0 );
+    // AddShipyard performs the whole order: checks, cost deduction and the
+    // queue entry (queue.php AddShipyard), so the duplicate AddQueue call
+    // below must not be repeated (it would enqueue the order twice).
+    $res = AddShipyard ($user['player_id'], $user['aktplanet'], $obj_id, $n, $BotNow );
     if ( $res ) {
         $speed = $GlobalUni['speed'];
-        $now = ShipyardLatestTime ($aktplanet, $BotNow);
         $shipyard = $aktplanet[GID_B_SHIPYARD];
         $nanits = $aktplanet[GID_B_NANITES];
         $seconds = TechDuration ( $obj_id, 1, PROD_SHIPYARD_DURATION_FACTOR, $shipyard, $nanits, $speed );
-        AddQueue ($user['player_id'], QTYP_SHIPYARD, $aktplanet['planet_id'], $obj_id, $n, $now, $seconds);
         UpdatePlanetActivity ( $user['aktplanet'], $BotNow );
         return $seconds;
     }
@@ -285,7 +286,8 @@ function BotCanResearch (int $obj_id) : bool
     if ($user == null) return false;
     $aktplanet = GetUpdatePlanet ( $user['aktplanet'], $BotNow );
     if ($aktplanet == null) return false;
-    $level = $aktplanet[$obj_id] + 1;
+    // Research levels are stored in the users table, not on the planet row.
+    $level = $user[$obj_id] + 1;
     $text = CanResearch ($user, $aktplanet, $obj_id, $level);
     return ($text === '' );
 }
@@ -303,12 +305,13 @@ function BotResearch (int $obj_id) : int
     if ($user == null) return 0;
     $aktplanet = LoadPlanetById ( $user['aktplanet'] );
     if ($aktplanet == null) return 0;
-    $level = $aktplanet[$obj_id] + 1;
+    // Research levels are stored in the users table, not on the planet row.
+    $level = $user[$obj_id] + 1;
     $text = StartResearch ($user['player_id'], $user['aktplanet'], $obj_id, 0);
     if ( $text === '' ) {
         $speed = $GlobalUni['speed'];
         if ($BotNow == 0) $BotNow = time ();
-        $reslab = ResearchNetwork ( $user['planet_id'], $obj_id );
+        $reslab = ResearchNetwork ( $user['aktplanet'], $obj_id );
         $prem = PremiumStatus ($user);
         if ( $prem['technocrat'] ) $r_factor = 1.1;
         else $r_factor = 1.0;

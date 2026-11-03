@@ -91,6 +91,7 @@ class Suche extends Page {
                     {
                         $user = dbarray ( $result );
                         $homeplanet = LoadPlanetById ( intval($user['hplanetid']) );
+                        if ( $homeplanet === null ) continue;    // orphan/technical account without a home planet
                         $ally = LoadAlly ( intval($user['ally_id']) );
                         $ally_tag = "";
                         if ($ally) {
@@ -109,13 +110,13 @@ class Suche extends Page {
                             $allyurl = "index.php?page=allianzen&session=$session";
                         }
                         $SearchResult .= "<tr>\n";
-                        $SearchResult .= "<th>$name</th><th>$buttons</th><th> <a href='".$allyurl."' target='_ally'>".$ally_tag."</a></th><th>".$homeplanet['name']."</th><th><a href=\"index.php?page=galaxy&no_header=1&session=$session&p1=".$homeplanet['g']."&p2=".$homeplanet['s']."&p3=".$homeplanet['p']."\">".$homeplanet['g'].":".$homeplanet['s'].":".$homeplanet['p']."</a></th><th><a href=\"index.php?page=statistics&session=$session&start=".(floor($user['place1']/100)*100+1)."\">".$user['place1']."</a></th></tr>\n";
+                        $SearchResult .= "<th>$name</th><th>$buttons</th><th> <a href='".$allyurl."' target='_ally'>".$ally_tag."</a></th><th>".htmlspecialchars((string)$homeplanet['name'])."</th><th><a href=\"index.php?page=galaxy&no_header=1&session=$session&p1=".$homeplanet['g']."&p2=".$homeplanet['s']."&p3=".$homeplanet['p']."\">".$homeplanet['g'].":".$homeplanet['s'].":".$homeplanet['p']."</a></th><th><a href=\"index.php?page=statistics&session=$session&start=".(floor($user['place1']/100)*100+1)."\">".$user['place1']."</a></th></tr>\n";
                     }
                     else if ( $_POST['type'] === "planetname" )
                     {
                         $planet = dbarray ( $result );
                         $user = LoadUser ( intval($planet['owner_id']) );
-                        if ( $user === null ) $user = array();
+                        if ( $user === null ) continue;    // orphan planet (deleted player / technical row)
                         $ally = LoadAlly ( intval($user['ally_id']) );
                         $ally_tag = "";
                         if ($ally) {
@@ -134,7 +135,7 @@ class Suche extends Page {
                             $allyurl = "index.php?page=allianzen&session=$session";
                         }
                         $SearchResult .= "<tr>\n";
-                        $SearchResult .= "<th>$name</th><th>$buttons</th><th> <a href='".$allyurl."' target='_ally'>".$ally_tag."</a></th><th>".$planet['name']."</th><th><a href=\"index.php?page=galaxy&no_header=1&session=$session&p1=".$planet['g']."&p2=".$planet['s']."&p3=".$planet['p']."\">".$planet['g'].":".$planet['s'].":".$planet['p']."</a></th><th><a href=\"index.php?page=statistics&session=$session&start=".(floor($user['place1']/100)*100+1)."\">".$user['place1']."</a></th></tr>\n";
+                        $SearchResult .= "<th>$name</th><th>$buttons</th><th> <a href='".$allyurl."' target='_ally'>".$ally_tag."</a></th><th>".htmlspecialchars((string)$planet['name'])."</th><th><a href=\"index.php?page=galaxy&no_header=1&session=$session&p1=".$planet['g']."&p2=".$planet['s']."&p3=".$planet['p']."\">".$planet['g'].":".$planet['s'].":".$planet['p']."</a></th><th><a href=\"index.php?page=statistics&session=$session&start=".(floor($user['place1']/100)*100+1)."\">".$user['place1']."</a></th></tr>\n";
                     }
                     else if ( $_POST['type'] === "allytag" || $_POST['type'] === "allyname" )
                     {
@@ -146,7 +147,10 @@ class Suche extends Page {
                             $allyurl = "index.php?page=allianzen&session=$session";
                         }
                         $SearchResult .= "<tr>\n";
-                        $SearchResult .= "<th><a href='".$allyurl."' target='_ally'>$tag</font></a></th><th>".htmlspecialchars($ally['name'])."</th><th>4</th><th>0</th></tr>\n";
+                        $SearchResult .= "<th><a href='".$allyurl."' target='_ally'>$tag</font></a></th><th>".htmlspecialchars($ally['name'])."</th>";
+                        // Show the real member count and points instead of fixed values.
+                        $cnt = CountAllyMembers ( $ally['ally_id'] );
+                        $SearchResult .= "<th>".$cnt."</th><th>".nicenum( floor (intval($ally['score1']) / 1000) )."</th></tr>\n";
                     }
                 }
 

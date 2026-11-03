@@ -15,7 +15,7 @@ class Admin_Logins extends Page {
 
             if ( $_POST['name'] !== '' )        // By user name
             {
-                $searchtext = $_POST['name'];
+                $searchtext = addslashes ((string) $_POST['name']);
                 $query = "SELECT * FROM ".$db_prefix."users WHERE oname LIKE '".$searchtext."%' LIMIT 25";
                 $result = dbquery ( $query );
                 $rows = dbrows ($result);
@@ -62,7 +62,7 @@ class Admin_Logins extends Page {
 
             if ( $_POST['ip'] !== '' )        // By IP address
             {
-                $query = "SELECT * FROM ".$db_prefix."iplogs WHERE ip = '".$_POST['ip']."' AND reg = 0";
+                $query = "SELECT * FROM ".$db_prefix."iplogs WHERE ip = '".addslashes((string) $_POST['ip'])."' AND reg = 0";
                 $result = dbquery ( $query );
                 $rows = dbrows ($result);
                 $this->search_result .= "<table>";

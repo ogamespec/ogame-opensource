@@ -21,7 +21,7 @@
 // - Errors (admin only)
 // - Mods (admin only)
 
-if ( $GlobalUser['admin'] == USER_TYPE_PLAYER ) RedirectHome ();    // regular users are not allowed
+if ( $GlobalUser['admin'] == USER_TYPE_PLAYER ) { RedirectHome (); return; }    // regular users are not allowed; stop before any admin content is rendered
 
 if ( key_exists ('mode', $_GET) ) $mode = $_GET['mode'];
 else $mode = "Home";

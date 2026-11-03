@@ -47,7 +47,7 @@ class Renameplanet extends Page {
                         // The home planet cannot be deleted.
                         if ( intval($_POST['deleteid']) == $GlobalUser['hplanetid'] ) $PageError = "<center>\n".loca("REN_ERROR_HOME_PLANET")."<br></center>\n";
                         else {
-                            $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = " . intval($_POST['deleteid']) . " AND owner_id = " . $GlobalUser['player_id'];
+                            $query = "SELECT * FROM ".$db_prefix."fleet WHERE target_planet = " . intval($_POST['deleteid']);
                             $result = dbquery ( $query );
                             if ( dbrows ($result) > 0 ) $PageError = "<center>\n".loca("REN_ERROR_FLEET_INCOME")."<br></center>\n";
 

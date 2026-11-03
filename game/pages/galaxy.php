@@ -37,6 +37,8 @@ class Galaxy extends Page {
                 if ($amount == 0) $PageError = loca("GALAXY_RAK_NO_ROCKETS");
                 if ($amount > $aktplanet[GID_D_IPM]) $PageError = loca("GALAXY_RAK_NOT_ENOUGH");
                 if ($dist > $ipm_radius) $PageError = loca("GALAXY_RAK_WEAK_DRIVE");
+                if ($origin['g'] != $target['g']) $PageError = loca("GALAXY_RAK_WEAK_DRIVE");
+                if (intval($_GET['p1'] ?? 0) != $target['g'] || intval($_GET['p2'] ?? 0) != $target['s'] || intval($_GET['p3'] ?? 0) != $target['p']) $PageError = loca("GALAXY_RAK_NO_TARGET");
 
                 if ( $PageError === "" )        // Check player modes
                 {

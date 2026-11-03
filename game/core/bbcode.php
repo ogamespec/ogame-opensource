@@ -758,7 +758,7 @@ class bbcode {
                     break;
                 case 'close':
                     $not_normal = isset($not_tags[$val['level']])
-                        && $not_tags[$val['level']] = $val['name'];
+                        && $not_tags[$val['level']] == $val['name'];
                     if ( $not_normal ) {
                         unset($not_tags[$val['level']]);
                         $type = (-1 < $normal_key)
@@ -925,12 +925,17 @@ class bbcode {
         $text = nl2br(htmlspecialchars($text,ENT_NOQUOTES));
         $text = str_replace('  ', '&nbsp;&nbsp;', $text);
         if ($this -> autolinks) {
-            $uri = "[\w\d-]+\.[\w\d-]+[^\s<\"\']*[^.,;\s<\"\'\)]+";
+            // The text was htmlspecialchars()'d above, so an ampersand in a
+            // URL already reads "&amp;": the body class must therefore accept
+            // the entity characters (";" and "&") as well, or a query string
+            // would be cut at the entity. The final class keeps trailing
+            // sentence punctuation out of the link.
+            $uri = "[\w\d-]+\.[\w\d-]+[\w\d\-.\/~?&=+%#;]*[\w\d\-\/~]";
             $search = array(
-                "'(.)((http|https|ftp)://".$uri.")'si",
-                "'([^/])(www\.".$uri.")'si",
+                "'(.)((http|https|ftp)://".$uri.")(?=[.,;!?\s<\"\'\)]|$)'si",
+                "'([^/])(www\.".$uri.")(?=[.,;!?\s<\"\'\)]|$)'si",
                 // https://stackoverflow.com/questions/24764212/preg-match-compilation-failed-invalid-range-in-character-class-at-offset
-                "'([^\w\d\-.])([\w\d\-.]+@[\w\d\-.]+\.[\w]+[^.,;\s<\"\'\)]+)'si"
+                "'([^\w\d\-.])([\w\d\-.]+@[\w\d\-.]+\.[\w]+)(?=[.,;!?\s<\"\'\)]|$)'si"
             );
             $replace = array(
                 '$1<a href="$2" target="_blank">$2</a>',
@@ -1338,8 +1343,13 @@ class bb_img extends bbcode {
         $src = str_replace(':', '&#'.ord(':').';', $src);
         $src = str_replace('(', '&#'.ord('(').';', $src);
         $src = str_replace(')', '&#'.ord(')').';', $src);
+        // No whitespace may survive: the attributes below are quoted, but the
+        // URL is also embedded in a query string, and an unencoded space would
+        // split the attribute value and allow attribute injection
+        // (e.g. [img]http://x onerror=...[/img]).
+        $src = preg_replace('/[\x00-\x20]+/', '', $src) ?? $src;
 
-        return "<img class=reloadimage title=$src src=pic.php?url=".$src." />";
+        return '<img class="reloadimage" title="'.$src.'" src="pic.php?url='.$src.'" />';
 //      return '<img src="'.$src.'" '.$attr.' />';
     }
 }
