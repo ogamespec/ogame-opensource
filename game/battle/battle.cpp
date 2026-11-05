@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <time.h>
 #include <math.h>
+#include <errno.h>
 #include "battle.h"
 #include "file.h"
 #include "rand.h"
@@ -61,7 +62,12 @@ Array (
 
 */
 
-char ResultBuffer[64*1024];     // Output data buffer
+// The battle report is built here and written to disk right after the battle.
+// 128 KiB is twice the historical 64 KiB: the old size was enough for ordinary
+// battles, and the checks in DoBattle() turn an oversized report into a clean
+// error instead of an overflow.
+static const size_t RESULT_BUFFER_SIZE = 128 * 1024;
+char ResultBuffer[RESULT_BUFFER_SIZE];
 
 int Rapidfire = 1;  // 1: enable rapidfire
 
@@ -378,6 +384,26 @@ static int RapidFire(int atyp, int dtyp) {
     return rf;
 }
 
+// Upper bound for one GenSlot() entry: the slot header, the optional tech
+// values and one "unit id => count" pair for every known object id.
+static const size_t RESULT_SLOT_MAX_BYTES = MAX_UNIT_TYPES * 40 + 2048;
+
+// Returns true when the report buffer can accept `needed` more characters.
+// Every write is checked before it happens, so the buffer never overruns.
+static bool ResultBufferHasRoom (const char *write_pos, size_t needed)
+{
+    const size_t used = (size_t)(write_pos - ResultBuffer);
+    return used <= sizeof(ResultBuffer) && needed <= sizeof(ResultBuffer) - used;
+}
+
+// Releases the battle arrays and reports that the report did not fit.
+static int ResultBufferOverflow (Unit *attackers, Unit *defenders)
+{
+    free(attackers);
+    free(defenders);
+    return BATTLE_ERROR_RESULT_BUFFER_OVERFLOW;
+}
+
 int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, int max_round)
 {
     long slot, i, n, aobjs = 0, dobjs = 0, idx, rounds, sum = 0;
@@ -414,30 +440,30 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
     }
     peak_allocated_all_rounds = peak_allocated_round;
 
+    if (!ResultBufferHasRoom(ptr, 1024)) return ResultBufferOverflow(aunits, dunits);
     ptr += sprintf (ptr, "a:5:{");
 
     // Fleets before the battle
     ptr += sprintf (ptr, "s:6:\"before\";a:2:{");
     ptr += sprintf ( ptr, "s:9:\"attackers\";a:%i:{", anum );
     for (slot=0; slot<anum; slot++) {
+        if (!ResultBufferHasRoom(ptr, RESULT_SLOT_MAX_BYTES)) return ResultBufferOverflow(aunits, dunits);
         ptr = GenSlot (ptr, aunits, slot, aobjs, a, 1);
     }
     ptr += sprintf ( ptr, "}" );
     ptr += sprintf ( ptr, "s:9:\"defenders\";a:%i:{", dnum );
     for (slot=0; slot<dnum; slot++) {
+        if (!ResultBufferHasRoom(ptr, RESULT_SLOT_MAX_BYTES)) return ResultBufferOverflow(aunits, dunits);
         ptr = GenSlot (ptr, dunits, slot, dobjs, d, 1);
     }
     ptr += sprintf ( ptr, "}" );
     ptr += sprintf ( ptr, "}" );
 
+    if (!ResultBufferHasRoom(ptr, 1024)) return ResultBufferOverflow(aunits, dunits);
+    // The size of the rounds array is patched in place when the battle ends.
+    // Two digits are reserved, which is enough for the game's round limit (< 100).
     round_patch = ptr + 15;
     ptr += sprintf (ptr, "s:6:\"rounds\";a:XX:{");
-
-    if ((ptr - ResultBuffer) >= sizeof(ResultBuffer)) {
-        free(aunits);
-        free(dunits);
-        return BATTLE_ERROR_RESULT_BUFFER_OVERFLOW;
-    }
 
     for (rounds=0; rounds<max_round; rounds++)
     {
@@ -528,7 +554,8 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
         }
 
         // Round.
-        ptr += sprintf ( ptr, "i:%i;a:8:", rounds );
+        if (!ResultBufferHasRoom(ptr, 1024)) return ResultBufferOverflow(aunits, dunits);
+        ptr += sprintf ( ptr, "i:%li;a:8:", rounds );
         ptr += sprintf ( ptr, "{s:6:\"ashoot\";d:%s;", longnumber(shoots[0]) );
         ptr += sprintf ( ptr, "s:6:\"apower\";d:%s;", longnumber(spower[0]) ); 
         ptr += sprintf ( ptr, "s:7:\"dabsorb\";d:%s;", longnumber(absorbed[1]) );
@@ -537,24 +564,14 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
         ptr += sprintf ( ptr, "s:7:\"aabsorb\";d:%s;", longnumber(absorbed[0]) );
         ptr += sprintf ( ptr, "s:9:\"attackers\";a:%i:{", anum );
         for (slot=0; slot<anum; slot++) {
+            if (!ResultBufferHasRoom(ptr, RESULT_SLOT_MAX_BYTES)) return ResultBufferOverflow(aunits, dunits);
             ptr = GenSlot (ptr, aunits, slot, aobjs, a, 0);
-
-            if ((ptr - ResultBuffer) >= sizeof(ResultBuffer)) {
-                free(aunits);
-                free(dunits);
-                return BATTLE_ERROR_RESULT_BUFFER_OVERFLOW;
-            }
         }
         ptr += sprintf ( ptr, "}" );
         ptr += sprintf ( ptr, "s:9:\"defenders\";a:%i:{", dnum );
         for (slot=0; slot<dnum; slot++) {
+            if (!ResultBufferHasRoom(ptr, RESULT_SLOT_MAX_BYTES)) return ResultBufferOverflow(aunits, dunits);
             ptr = GenSlot (ptr, dunits, slot, dobjs, d, 0);
-
-            if ((ptr - ResultBuffer) >= sizeof(ResultBuffer)) {
-                free(aunits);
-                free(dunits);
-                return BATTLE_ERROR_RESULT_BUFFER_OVERFLOW;
-            }
         }
         ptr += sprintf ( ptr, "}" );
         ptr += sprintf ( ptr, "}" );
@@ -580,16 +597,13 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
         res = "draw";
     }
 
+    if (!ResultBufferHasRoom(ptr, 1024)) return ResultBufferOverflow(aunits, dunits);
     ptr += sprintf (ptr, "}s:6:\"result\";s:4:\"%s\";", res);
     ptr += sprintf (ptr, "s:11:\"battle_seed\";d:%s;", longnumber (battle_seed));
     ptr += sprintf (ptr, "s:14:\"peak_allocated\";d:%s;}", longnumber (peak_allocated_all_rounds));
 
     free (aunits);
     free (dunits);
-
-    if ((ptr - ResultBuffer) >= sizeof(ResultBuffer)) {
-        return BATTLE_ERROR_RESULT_BUFFER_OVERFLOW;
-    }
 
     return 0;
 }
@@ -622,12 +636,13 @@ char* extract_payload(char* lp) {
     memset(text, 0, text_size + 1);
 
     char* text_ptr = text;
-    while (*lp <= ' ') lp++;
+    while (*lp && *lp <= ' ') lp++;
     while (*lp >= ' ') *text_ptr++ = *lp++;
     *text_ptr++ = 0;
+    if (text_ptr == text + 1) return text;   // There is no data in the payload
     size_t last_char = strlen(text) - 1;
     text_ptr = &text[last_char];
-    while (*text_ptr <= ' ') *text_ptr-- = 0;
+    while (text_ptr > text && *text_ptr <= ' ') *text_ptr-- = 0;
 
     return text;
 }
@@ -724,12 +739,21 @@ int ParseUnitParam(char* lp)
             free_explode_result(argv);
             return BATTLE_ERROR_PARSE_UNIT_PARAM_DUPLICATED;
         }
+        int structure = atoi(argv[pc++]);
+        int shield = atoi(argv[pc++]);
+        int attack = atoi(argv[pc++]);
+        // A zero (or negative) structure leads to a division by zero in the explosion roll
+        if (structure < 1 || shield < 0 || attack < 0) {
+            free_explode_result(argv);
+            return BATTLE_ERROR_PARSE_UNIT_PARAM_NOT_ALIGNED;
+        }
+
         FlattenId(gid);
 
         TechParam* unitParam = &UnitParam[IdToOrd(gid)];
-        unitParam->structure = atoi(argv[pc++]);
-        unitParam->shield = atoi(argv[pc++]);
-        unitParam->attack = atoi(argv[pc++]);
+        unitParam->structure = structure;
+        unitParam->shield = shield;
+        unitParam->attack = attack;
         unitParam->cargo = atoi(argv[pc++]);
         unitParam->speed = atoi(argv[pc++]);
         unitParam->consumption = atoi(argv[pc++]);
@@ -741,7 +765,7 @@ int ParseUnitParam(char* lp)
 
 int SetRapidfire(int enable, char* rftab) {
     Rapidfire = enable & 1;
-    memset(&RF, 0, sizeof(RFTab));
+    memset(RF, 0, sizeof(RF));
     if (Rapidfire) {
         // Setup rapidfire table
 
@@ -844,6 +868,11 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
     int anum = 0, dnum = 0, max_round = 6;
     char *ptr, line[0x1000], buf[64], *lp, *rftab, *uparam;
 
+    // A second battle in the same process must not see the data of the previous one
+    flatten_counter = 0;
+    memset(flatten_array, 0, sizeof(flatten_array));
+    memset(unflatten_array, 0, sizeof(unflatten_array));
+
     ptr = strstr (text, "Rapidfire");       // Rapid-fire
     if ( ptr ) {
         ptr = strstr ( ptr, "=" ) + 1;
@@ -911,14 +940,22 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
     // Attackers.
     for (i=0; i<anum; i++)
     {
+        line[0] = 0;
         sprintf ( buf, "Attacker%i", i );
         ptr = strstr (text, buf);
-        if ( ptr ) {
-            lp = line;
-            ptr = strstr ( ptr, "=" ) + 1;
-            while ( *ptr >= ' ' ) *lp++ = *ptr++;
-            *lp++ = 0;
+        if ( !ptr ) {
+            res = BATTLE_ERROR_PARSE_SLOT_NOT_ENOUGH;
+            goto exit_with_result;
         }
+        lp = line;
+        ptr = strstr ( ptr, "=" );
+        if ( !ptr ) {
+            res = BATTLE_ERROR_PARSE_SLOT_NOT_ENOUGH;
+            goto exit_with_result;
+        }
+        ptr++;
+        while ( *ptr >= ' ' && (size_t)(lp - line) < sizeof(line) - 1 ) *lp++ = *ptr++;
+        *lp = 0;
 
         res = ParseSlot(&a[i], line);
         if (res < 0) {
@@ -929,14 +966,22 @@ int StartBattle (char *text, int battle_id, unsigned long battle_seed)
     // Defenders.
     for (i=0; i<dnum; i++)
     {
+        line[0] = 0;
         sprintf ( buf, "Defender%i", i );
         ptr = strstr (text, buf);
-        if ( ptr ) {
-            lp = line;
-            ptr = strstr ( ptr, "=" ) + 1;
-            while ( *ptr >= ' ' ) *lp++ = *ptr++;
-            *lp++ = 0;
+        if ( !ptr ) {
+            res = BATTLE_ERROR_PARSE_SLOT_NOT_ENOUGH;
+            goto exit_with_result;
         }
+        lp = line;
+        ptr = strstr ( ptr, "=" );
+        if ( !ptr ) {
+            res = BATTLE_ERROR_PARSE_SLOT_NOT_ENOUGH;
+            goto exit_with_result;
+        }
+        ptr++;
+        while ( *ptr >= ' ' && (size_t)(lp - line) < sizeof(line) - 1 ) *lp++ = *ptr++;
+        *lp = 0;
 
         res = ParseSlot(&d[i], line);
         if (res < 0) {
@@ -1012,7 +1057,12 @@ int main(int argc, char **argv)
         }
 
         // Initialize RNG
-        battle_seed = atoi(argv[2]);
+        errno = 0;
+        char* seed_end = NULL;
+        battle_seed = strtoul(argv[2], &seed_end, 10);
+        if (errno == ERANGE || seed_end == argv[2] || *seed_end != '\0') {
+            battle_seed = 0;
+        }
         if (battle_seed == 0) {
             battle_seed = (unsigned long)time(NULL);
         }
