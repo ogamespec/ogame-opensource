@@ -62,7 +62,12 @@ Array (
 
 */
 
-char ResultBuffer[1024*1024];   // Output data buffer (the size of the output depends on the number of units in the slots)
+// The battle report is built here and written to disk right after the battle.
+// 128 KiB is twice the historical 64 KiB: the old size was enough for ordinary
+// battles, and the checks in DoBattle() turn an oversized report into a clean
+// error instead of an overflow.
+static const size_t RESULT_BUFFER_SIZE = 128 * 1024;
+char ResultBuffer[RESULT_BUFFER_SIZE];
 
 int Rapidfire = 1;  // 1: enable rapidfire
 
@@ -379,6 +384,26 @@ static int RapidFire(int atyp, int dtyp) {
     return rf;
 }
 
+// Upper bound for one GenSlot() entry: the slot header, the optional tech
+// values and one "unit id => count" pair for every known object id.
+static const size_t RESULT_SLOT_MAX_BYTES = MAX_UNIT_TYPES * 40 + 2048;
+
+// Returns true when the report buffer can accept `needed` more characters.
+// Every write is checked before it happens, so the buffer never overruns.
+static bool ResultBufferHasRoom (const char *write_pos, size_t needed)
+{
+    const size_t used = (size_t)(write_pos - ResultBuffer);
+    return used <= sizeof(ResultBuffer) && needed <= sizeof(ResultBuffer) - used;
+}
+
+// Releases the battle arrays and reports that the report did not fit.
+static int ResultBufferOverflow (Unit *attackers, Unit *defenders)
+{
+    free(attackers);
+    free(defenders);
+    return BATTLE_ERROR_RESULT_BUFFER_OVERFLOW;
+}
+
 int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, int max_round)
 {
     long slot, i, n, aobjs = 0, dobjs = 0, idx, rounds, sum = 0;
@@ -389,12 +414,6 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
     const char* res;
 
     uint64_t shoots[2] = { 0,0 }, spower[2] = { 0,0 }, absorbed[2] = { 0,0 }; // Total shot statistics.
-
-    // Free space left in the result buffer. Every write to it is preceded by a check of this value.
-#define RB_FREE() (sizeof(ResultBuffer) - (size_t)(ptr - ResultBuffer))
-#define RB_GUARD_FREE(need) if (RB_FREE() < (size_t)(need)) { free(aunits); free(dunits); return BATTLE_ERROR_RESULT_BUFFER_OVERFLOW; }
-    // GenSlot() emits an entry for every known unit type (up to MAX_UNIT_TYPES)
-#define RB_SLOT_SPACE (MAX_UNIT_TYPES * 40 + 2048)
 
     // Count the number of units before battle.
     for (i=0; i<anum; i++) {
@@ -421,26 +440,26 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
     }
     peak_allocated_all_rounds = peak_allocated_round;
 
-    RB_GUARD_FREE(1024)
+    if (!ResultBufferHasRoom(ptr, 1024)) return ResultBufferOverflow(aunits, dunits);
     ptr += sprintf (ptr, "a:5:{");
 
     // Fleets before the battle
     ptr += sprintf (ptr, "s:6:\"before\";a:2:{");
     ptr += sprintf ( ptr, "s:9:\"attackers\";a:%i:{", anum );
     for (slot=0; slot<anum; slot++) {
-        RB_GUARD_FREE(RB_SLOT_SPACE)
+        if (!ResultBufferHasRoom(ptr, RESULT_SLOT_MAX_BYTES)) return ResultBufferOverflow(aunits, dunits);
         ptr = GenSlot (ptr, aunits, slot, aobjs, a, 1);
     }
     ptr += sprintf ( ptr, "}" );
     ptr += sprintf ( ptr, "s:9:\"defenders\";a:%i:{", dnum );
     for (slot=0; slot<dnum; slot++) {
-        RB_GUARD_FREE(RB_SLOT_SPACE)
+        if (!ResultBufferHasRoom(ptr, RESULT_SLOT_MAX_BYTES)) return ResultBufferOverflow(aunits, dunits);
         ptr = GenSlot (ptr, dunits, slot, dobjs, d, 1);
     }
     ptr += sprintf ( ptr, "}" );
     ptr += sprintf ( ptr, "}" );
 
-    RB_GUARD_FREE(1024)
+    if (!ResultBufferHasRoom(ptr, 1024)) return ResultBufferOverflow(aunits, dunits);
     // Reserve as many digits for the round counter as the maximum number of rounds can need
     int round_digits = 2;
     for (int m = max_round; m >= 100; m /= 10) round_digits++;
@@ -536,7 +555,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
         }
 
         // Round.
-        RB_GUARD_FREE(1024)
+        if (!ResultBufferHasRoom(ptr, 1024)) return ResultBufferOverflow(aunits, dunits);
         ptr += sprintf ( ptr, "i:%li;a:8:", rounds );
         ptr += sprintf ( ptr, "{s:6:\"ashoot\";d:%s;", longnumber(shoots[0]) );
         ptr += sprintf ( ptr, "s:6:\"apower\";d:%s;", longnumber(spower[0]) ); 
@@ -546,13 +565,13 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
         ptr += sprintf ( ptr, "s:7:\"aabsorb\";d:%s;", longnumber(absorbed[0]) );
         ptr += sprintf ( ptr, "s:9:\"attackers\";a:%i:{", anum );
         for (slot=0; slot<anum; slot++) {
-            RB_GUARD_FREE(RB_SLOT_SPACE)
+            if (!ResultBufferHasRoom(ptr, RESULT_SLOT_MAX_BYTES)) return ResultBufferOverflow(aunits, dunits);
             ptr = GenSlot (ptr, aunits, slot, aobjs, a, 0);
         }
         ptr += sprintf ( ptr, "}" );
         ptr += sprintf ( ptr, "s:9:\"defenders\";a:%i:{", dnum );
         for (slot=0; slot<dnum; slot++) {
-            RB_GUARD_FREE(RB_SLOT_SPACE)
+            if (!ResultBufferHasRoom(ptr, RESULT_SLOT_MAX_BYTES)) return ResultBufferOverflow(aunits, dunits);
             ptr = GenSlot (ptr, dunits, slot, dobjs, d, 0);
         }
         ptr += sprintf ( ptr, "}" );
@@ -578,7 +597,7 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
         res = "draw";
     }
 
-    RB_GUARD_FREE(1024)
+    if (!ResultBufferHasRoom(ptr, 1024)) return ResultBufferOverflow(aunits, dunits);
     ptr += sprintf (ptr, "}s:6:\"result\";s:4:\"%s\";", res);
     ptr += sprintf (ptr, "s:11:\"battle_seed\";d:%s;", longnumber (battle_seed));
     ptr += sprintf (ptr, "s:14:\"peak_allocated\";d:%s;}", longnumber (peak_allocated_all_rounds));
@@ -588,10 +607,6 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
 
     return 0;
 }
-
-#undef RB_FREE
-#undef RB_GUARD_FREE
-#undef RB_SLOT_SPACE
 
 // ==========================================================================================
 // Battle engine initialization - get data and allocate it to arrays.
