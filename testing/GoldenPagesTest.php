@@ -446,6 +446,33 @@ class GoldenPagesTest extends TestCase
         $this->assertNotEquals($html1, $html2);
     }
 
+    /**
+     * Test the complete Overview event matrix (issue: golden coverage of all
+     * event combinations). The base fixture only produces attack, spy,
+     * transport, destroy, deploy, recycle, expedition and colonize rows;
+     * FixtureBuilder::addEventMatrix() adds a dedicated player with ACS
+     * attack/head/hold, missile, custom and friendly/hostile union events.
+     */
+    #[DataProvider('languages')]
+    public function testOverviewEventMatrix(): void
+    {
+        $this->fixture->addEventMatrix();
+        $html = $this->renderPage('overview', [], 3);
+
+        $this->assertStringContainsString('<html', $html);
+        $this->assertStringContainsString('Event Home', $html);
+        // Renderer families that are missing from the base fixture.
+        $this->assertStringContainsString("class='federation'", $html);          // own/hostile ACS attack
+        $this->assertStringContainsString("class='return ownfederation'", $html); // own ACS return
+        $this->assertStringContainsString("class='holding ownhold'", $html);      // own ACS hold
+        $this->assertStringContainsString("class='holding hold'", $html);         // friendly ACS hold
+        $this->assertStringContainsString("class='ownmissile'", $html);           // own missile attack
+        $this->assertStringContainsString("class='missile'", $html);              // foreign missile attack
+        $this->assertStringContainsString('Type:1000', $html);                    // custom mission fallback
+
+        $this->compareOrSaveGolden('overview_events', 3, $html);
+    }
+
     // ========================================================================
     // Buildings / research / shipyard
     // ========================================================================
@@ -1041,6 +1068,31 @@ class GoldenPagesTest extends TestCase
         $html = $this->renderPage('phalanx', ['cp' => $moonId, 'spid' => 8], 0);
         $this->assertStringContainsString('<html', $html);
         $this->compareOrSaveGolden('phalanx_empty', 0, $html);
+    }
+
+    /**
+     * Test the complete Phalanx event matrix. The base phalanx snapshot only
+     * contains attack/spy rows; FixtureBuilder::addEventMatrix() adds a
+     * dedicated target planet with every mission, depart/return/hold
+     * direction and ACS union.
+     */
+    #[DataProvider('languages')]
+    public function testPhalanxEventMatrix(): void
+    {
+        $matrix = $this->fixture->addEventMatrix();
+        $html = $this->renderPage('phalanx', ['cp' => $matrix['moon_id'], 'spid' => $matrix['phalanx_target_id']], 3);
+
+        $this->assertStringContainsString('<html', $html);
+        // All Phalanx row families: departure, return, hold, ACS union,
+        // missile and the ownclass mission wrappers.
+        $this->assertStringContainsString("class='phalanx_fleet'", $html);
+        $this->assertStringContainsString("class='flight phalanx_fleet'", $html);
+        $this->assertStringContainsString("class='return phalanx_fleet'", $html);
+        $this->assertStringContainsString("class='holding phalanx_fleet'", $html);
+        $this->assertStringContainsString("class='missile'", $html);
+        $this->assertStringContainsString("class='ownclass'", $html);
+
+        $this->compareOrSaveGolden('phalanx_events', 3, $html);
     }
 
     /**
