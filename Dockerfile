@@ -42,9 +42,10 @@ RUN docker-php-ext-install mbstring mysqli pdo pdo_mysql
 RUN mkdir -p /var/www/html/persistent_configs
 # Change ownership of this directory so the web server can write to it
 RUN chown -R www-data:www-data /var/www/html/persistent_configs
-# Create two SEPARATE symbolic links for the two config files
-RUN ln -s /var/www/html/persistent_configs/root_config.php /var/www/html/config.php
-RUN ln -s /var/www/html/persistent_configs/game_config.php /var/www/html/game/config.php
+# Create two SEPARATE symbolic links for the two config files.
+# -f replaces a local config.php stub if one was copied into the build context.
+RUN ln -sf /var/www/html/persistent_configs/root_config.php /var/www/html/config.php
+RUN ln -sf /var/www/html/persistent_configs/game_config.php /var/www/html/game/config.php
 
 RUN chown -R www-data:www-data /var/www/html
 

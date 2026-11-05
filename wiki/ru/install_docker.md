@@ -60,6 +60,12 @@
 docker cp .\game\ ogame-opensource-server-1:/var/www/html/
 ```
 
+:warning: В локальном репозитории `game/config.php` — это заглушка, поэтому `docker cp` заменит ею символическую ссылку на боевой конфиг в контейнере. После копирования восстановите ссылку:
+
+```
+docker exec ogame-opensource-server-1 sh -c "rm -f /var/www/html/game/config.php && ln -s /var/www/html/persistent_configs/game_config.php /var/www/html/game/config.php"
+```
+
 Также нужно снова делать chown для www-data, т.к. теряются права владения и игра больше не сможет создавать новые файлы в директориях battledata и temp. Делается это выполнением команды chown изнутри контейнера:
 
 ```

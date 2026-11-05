@@ -60,6 +60,12 @@ During development, you need to constantly update files in the container from th
 docker cp .\game\ ogame-opensource-server-1:/var/www/html/
 ```
 
+:warning: In the local repository `game/config.php` is a stub, so `docker cp` replaces the container's symlink to the real config with it. Restore the symlink after copying:
+
+```
+docker exec ogame-opensource-server-1 sh -c "rm -f /var/www/html/game/config.php && ln -s /var/www/html/persistent_configs/game_config.php /var/www/html/game/config.php"
+```
+
 You also need to chown www-data again, as ownership will be lost and the game will no longer be able to create new files in the battledata and temp directories. This is done by running the chown command from within the container:
 
 ```

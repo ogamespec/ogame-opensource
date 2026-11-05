@@ -7,6 +7,9 @@
 **/.classpath
 **/.dockerignore
 **/.env
+# Local/generated configs: the image links these to the persistent volume.
+config.php
+game/config.php
 **/.git
 **/.gitignore
 **/.project
