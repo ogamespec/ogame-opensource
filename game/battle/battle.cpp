@@ -460,11 +460,10 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
     ptr += sprintf ( ptr, "}" );
 
     if (!ResultBufferHasRoom(ptr, 1024)) return ResultBufferOverflow(aunits, dunits);
-    // Reserve as many digits for the round counter as the maximum number of rounds can need
-    int round_digits = 2;
-    for (int m = max_round; m >= 100; m /= 10) round_digits++;
+    // The size of the rounds array is patched in place when the battle ends.
+    // Two digits are reserved, which is enough for the game's round limit (< 100).
     round_patch = ptr + 15;
-    ptr += sprintf (ptr, "s:6:\"rounds\";a:%0*i:{", round_digits, 0);
+    ptr += sprintf (ptr, "s:6:\"rounds\";a:XX:{");
 
     for (rounds=0; rounds<max_round; rounds++)
     {
@@ -580,10 +579,11 @@ int DoBattle (Slot *a, int anum, Slot *d, int dnum, unsigned long battle_seed, i
         if (fastdraw) { rounds ++; break; }
     }
 
-    // Patch the number of the recorded rounds into the digits reserved in the header
-    char patch[32];
-    sprintf(patch, "%020li", rounds);
-    memcpy(round_patch, patch + 20 - round_digits, round_digits);
+    // Up to 99 rounds
+    char patch[10];
+    sprintf(patch, "%02i", rounds);
+    round_patch[0] = patch[0];
+    round_patch[1] = patch[1];
     
     // Battle Results.
     if (aobjs > 0 && dobjs == 0){ // The attacker won
