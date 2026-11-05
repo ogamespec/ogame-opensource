@@ -1,8 +1,5 @@
 # OGame Open Source
 
-> [!WARNING]
-> We are currently undergoing a massive refactoring based on PHPStan analysis results, and a [modification engine](/wiki/en/mods.md) is being added. Therefore, some bugs and syntax errors may be present, but they will be fixed as we go.
-
 This is a revived OGame v 0.84 with the old design.
 
 ---
