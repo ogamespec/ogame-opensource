@@ -542,6 +542,302 @@ class FixtureBuilder
         return time();
     }
 
+    /**
+     * Add a dedicated fourth player with an event matrix.
+     *
+     * The base universe only contains a subset of the event list
+     * combinations (attack/spy/transport/destroy/deploy/recycle/expedition/
+     * colonize). This method adds PlayerFour plus a moon with a sensor
+     * phalanx and a set of fleets/ACS unions that cover the remaining
+     * Overview and Phalanx branches:
+     *
+     *  - own depart/return/hold for every mission, including ACS attack,
+     *    ACS attack head, ACS hold, missile and a custom mission;
+     *  - enemy/friendly single fleets targeting the player's planets;
+     *  - hostile and friendly ACS unions (single- and multi-fleet rows);
+     *  - a separate target planet with depart/return/hold fleets for the
+     *    Phalanx view.
+     *
+     * The method is opt-in so the existing golden snapshots stay unchanged.
+     *
+     * @return array{player_id:int, home_id:int, colony_id:int, moon_id:int, phalanx_target_id:int}
+     */
+    public function addEventMatrix(): array
+    {
+        global $db_prefix;
+
+        $now = time();
+        $uni = $this->getUniData();
+        $lang = (string)($uni['lang'] ?? 'en');
+        $session = str_pad(dechex(1004), 12, '0', STR_PAD_LEFT);
+
+        // PlayerFour: a regular player with active officers so the Overview
+        // header and the event tooltips behave like for the other players.
+        AddDBRow (array (
+            'player_id' => 4,
+            'regdate' => $now - 30 * 86400,
+            'session' => $session,
+            'private_session' => '',
+            'name' => 'EventMatrix',
+            'oname' => 'EventMatrix',
+            'email' => 'player4@test.com',
+            'lang' => $lang,
+            'admin' => 0,
+            'validated' => 1,
+            'lastlogin' => $now - 3600,
+            'lastclick' => $now - 60,
+            'ip_addr' => '127.0.0.1',
+            'score1' => 30000, 'score2' => 20000, 'score3' => 10000,
+            'place1' => 4, 'place2' => 20, 'place3' => 30,
+            'dm' => 1000, 'dmfree' => 500,
+            'trader' => 0, 'rate_m' => 1.0, 'rate_k' => 1.0, 'rate_d' => 1.0,
+            'skin' => 'http://localhost/evolution/', 'useskin' => 1,
+            'flags' => USER_FLAG_DEFAULT | USER_FLAG_FOLDER_ESPIONAGE | USER_FLAG_FOLDER_COMBAT
+                | USER_FLAG_FOLDER_EXPEDITION | USER_FLAG_FOLDER_ALLIANCE | USER_FLAG_FOLDER_PLAYER | USER_FLAG_FOLDER_OTHER,
+            'maxspy' => 5, 'maxfleetmsg' => 10,
+            'com_until' => $now + 365 * 24 * 60 * 60,
+            'adm_until' => $now + 365 * 24 * 60 * 60,
+            'eng_until' => $now + 365 * 24 * 60 * 60,
+            'geo_until' => $now + 365 * 24 * 60 * 60,
+            'tec_until' => $now + 365 * 24 * 60 * 60,
+            GID_R_ESPIONAGE => 5, GID_R_COMPUTER => 6, GID_R_WEAPON => 3, GID_R_SHIELD => 3,
+            GID_R_ARMOUR => 4, GID_R_ENERGY => 5, GID_R_HYPERSPACE => 2, GID_R_COMBUST_DRIVE => 4,
+            GID_R_IMPULSE_DRIVE => 3, GID_R_HYPER_DRIVE => 2, GID_R_LASER_TECH => 4, GID_R_ION_TECH => 2,
+            GID_R_PLASMA_TECH => 1, GID_R_IGN => 0, GID_R_EXPEDITION => 2, GID_R_GRAVITON => 0,
+        ), 'users');
+
+        // Home + colony on the player's own planet slots; the moon is placed
+        // at the home coordinates and gets a level 3 sensor phalanx.
+        $homeId = AddDBRow (array (
+            'owner_id' => 4, 'name' => 'Event Home', 'type' => PTYP_PLANET,
+            'g' => 1, 's' => 1, 'p' => 7, 'diameter' => 12000, 'temp' => 60,
+            'fields' => 20, 'maxfields' => 20,
+            GID_B_METAL_MINE => 5, GID_B_CRYS_MINE => 3, GID_B_DEUT_SYNTH => 2, GID_B_SOLAR => 3,
+            GID_B_ROBOTS => 2, GID_B_SHIPYARD => 3, GID_B_RES_LAB => 4, GID_B_METAL_STOR => 5,
+            GID_B_CRYS_STOR => 5, GID_B_DEUT_STOR => 4, GID_B_MISS_SILO => 3,
+            GID_RC_METAL => 100000, GID_RC_CRYSTAL => 75000, GID_RC_DEUTERIUM => 50000,
+            'lastpeek' => $now - 600,
+        ), 'planets');
+        $colonyId = AddDBRow (array (
+            'owner_id' => 4, 'name' => 'Event Colony', 'type' => PTYP_PLANET,
+            'g' => 1, 's' => 1, 'p' => 8, 'diameter' => 10000, 'temp' => 50,
+            'fields' => 10, 'maxfields' => 10,
+            GID_B_METAL_MINE => 2, GID_B_CRYS_MINE => 2, GID_B_DEUT_SYNTH => 1, GID_B_SOLAR => 2,
+            GID_B_ROBOTS => 1, GID_B_SHIPYARD => 1, GID_B_METAL_STOR => 2, GID_B_CRYS_STOR => 2,
+            GID_B_DEUT_STOR => 2, GID_RC_METAL => 50000, GID_RC_CRYSTAL => 30000, GID_RC_DEUTERIUM => 20000,
+            'lastpeek' => $now - 600,
+        ), 'planets');
+        $moonId = AddDBRow (array (
+            'owner_id' => 4, 'name' => 'Event Moon', 'type' => PTYP_MOON,
+            'g' => 1, 's' => 1, 'p' => 7, 'diameter' => 8500, 'temp' => -30,
+            'fields' => 1, 'maxfields' => 10,
+            GID_B_LUNAR_BASE => 3, GID_B_PHALANX => 3, GID_B_SHIPYARD => 1,
+            GID_RC_METAL => 0, GID_RC_CRYSTAL => 0, GID_RC_DEUTERIUM => 100000,
+            'lastpeek' => $now - 600,
+        ), 'planets');
+
+        dbquery ("UPDATE {$db_prefix}users SET aktplanet = $homeId, hplanetid = $homeId WHERE player_id = 4");
+        dbquery ("UPDATE {$db_prefix}uni SET usercount = 4");
+
+        $this->players[4] = array (
+            'id' => 4,
+            'name' => 'EventMatrix',
+            'oname' => 'EventMatrix',
+            'session' => $session,
+            'planet_id' => $homeId,
+        );
+
+        // Resolve the planet ids the matrix refers to.
+        $planetId = function (string $where) use ($db_prefix): int {
+            $result = dbquery ("SELECT planet_id FROM {$db_prefix}planets WHERE $where LIMIT 1");
+            $row = dbarray ($result);
+            if ($row === false) {
+                throw new RuntimeException("Event matrix planet not found: $where");
+            }
+            return (int)$row['planet_id'];
+        };
+        $playerTwoHomeId = $planetId ('owner_id = 2 AND type = ' . PTYP_PLANET . ' ORDER BY planet_id');
+        $enemyHomeId = $planetId ('owner_id = 3 AND type = ' . PTYP_PLANET . ' ORDER BY planet_id');
+        $enemyMoonId = $planetId ('owner_id = 2 AND type = ' . PTYP_MOON . ' ORDER BY planet_id');
+        $dfId = $planetId ('type = ' . PTYP_DF);
+        $phantomId = $planetId ('type = ' . PTYP_COLONY_PHANTOM);
+        $farspaceId = $planetId ('type = ' . PTYP_FARSPACE);
+
+        // Dedicated Phalanx target: a foreign planet in the next system, so
+        // the matrix rows do not mix with the base fixture fleets.
+        $phalanxTargetId = AddDBRow (array (
+            'owner_id' => 2, 'name' => 'Event Target', 'type' => PTYP_PLANET,
+            'g' => 1, 's' => 2, 'p' => 9, 'diameter' => 11000, 'temp' => 40,
+            'fields' => 12, 'maxfields' => 12,
+            GID_RC_METAL => 20000, GID_RC_CRYSTAL => 10000, GID_RC_DEUTERIUM => 5000,
+            'lastpeek' => $now - 600,
+        ), 'planets');
+
+        $seq = 0;
+        $addFleet = function (array $fleet) use (&$seq, $now): int {
+            $seq++;
+            $fleet += array (
+                'union_id' => 0,
+                'flight_time' => 600,
+                'deploy_time' => 0,
+                'fuel' => 100,
+                GID_RC_METAL => 0, GID_RC_CRYSTAL => 0, GID_RC_DEUTERIUM => 0,
+                'ipm_amount' => 0, 'ipm_target' => 0,
+                GID_F_SC => 0, GID_F_LC => 0, GID_F_LF => 0, GID_F_HF => 0,
+                GID_F_CRUISER => 0, GID_F_BATTLESHIP => 0, GID_F_COLON => 0,
+                GID_F_RECYCLER => 0, GID_F_PROBE => 0, GID_F_BOMBER => 0,
+                GID_F_SAT => 0, GID_F_DESTRO => 0, GID_F_DEATHSTAR => 0,
+                GID_F_BATTLECRUISER => 0,
+            );
+            $fleetId = AddDBRow ($fleet, 'fleet');
+            // End times are unique and in the future, so the rendered rows
+            // are stable and the countdown is not skipped.
+            AddQueue (
+                $fleet['owner_id'], QTYP_FLEET, $fleetId, 0, 0,
+                $now - 60, 7200 + $seq * 60, QUEUE_PRIO_FLEET + $fleet['mission']
+            );
+            return $fleetId;
+        };
+
+        // --------------------------------------------------------------------
+        // Overview: own fleets (departures produce the pseudo return/hold
+        // rows in EventList).
+        // --------------------------------------------------------------------
+        $addFleet (array ('owner_id' => 4, 'mission' => FTYP_ATTACK, 'start_planet' => $homeId, 'target_planet' => $enemyHomeId, 'flight_time' => 1200, GID_F_LF => 10));
+        $addFleet (array ('owner_id' => 4, 'mission' => FTYP_TRANSPORT, 'start_planet' => $homeId, 'target_planet' => $colonyId, 'flight_time' => 900, GID_F_SC => 5, GID_F_LC => 2, GID_RC_METAL => 5000, GID_RC_CRYSTAL => 2000));
+        $addFleet (array ('owner_id' => 4, 'mission' => FTYP_DEPLOY, 'start_planet' => $homeId, 'target_planet' => $colonyId, 'flight_time' => 300, GID_F_LC => 2));
+        // Return leg of a deploy (only the Overview renders it; the Phalanx
+        // filters deploy returns out).
+        $addFleet (array ('owner_id' => 4, 'mission' => FTYP_DEPLOY + FTYP_RETURN, 'start_planet' => $homeId, 'target_planet' => $colonyId, 'flight_time' => 300, GID_F_LC => 2));
+        $addFleet (array ('owner_id' => 4, 'mission' => FTYP_SPY, 'start_planet' => $homeId, 'target_planet' => $enemyHomeId, 'flight_time' => 600, GID_F_PROBE => 3));
+        $addFleet (array ('owner_id' => 4, 'mission' => FTYP_COLONIZE, 'start_planet' => $homeId, 'target_planet' => $phantomId, 'flight_time' => 700, GID_F_COLON => 1));
+        $addFleet (array ('owner_id' => 4, 'mission' => FTYP_RECYCLE, 'start_planet' => $homeId, 'target_planet' => $dfId, 'flight_time' => 800, GID_F_RECYCLER => 2));
+        $addFleet (array ('owner_id' => 4, 'mission' => FTYP_DESTROY, 'start_planet' => $homeId, 'target_planet' => $enemyMoonId, 'flight_time' => 1500, GID_F_DEATHSTAR => 1));
+        $addFleet (array ('owner_id' => 4, 'mission' => FTYP_EXPEDITION, 'start_planet' => $homeId, 'target_planet' => $farspaceId, 'flight_time' => 2000, 'deploy_time' => 3600, GID_F_LC => 1, GID_F_LF => 2, GID_F_PROBE => 1));
+        $addFleet (array ('owner_id' => 4, 'mission' => FTYP_ACS_HOLD, 'start_planet' => $homeId, 'target_planet' => $colonyId, 'flight_time' => 950, 'deploy_time' => 1800, GID_F_LF => 4));
+        $addFleet (array ('owner_id' => 4, 'mission' => FTYP_ACS_ATTACK, 'start_planet' => $homeId, 'target_planet' => $enemyHomeId, 'flight_time' => 1100, GID_F_LF => 6));
+        $addFleet (array ('owner_id' => 4, 'mission' => FTYP_ACS_ATTACK_HEAD, 'start_planet' => $homeId, 'target_planet' => $enemyHomeId, 'flight_time' => 1150, GID_F_LF => 8));
+        $addFleet (array ('owner_id' => 4, 'mission' => FTYP_MISSILE, 'start_planet' => $homeId, 'target_planet' => $enemyHomeId, 'flight_time' => 0, 'ipm_amount' => 3, 'ipm_target' => GID_D_RL));
+        $addFleet (array ('owner_id' => 4, 'mission' => FTYP_CUSTOM, 'start_planet' => $homeId, 'target_planet' => $enemyHomeId, 'flight_time' => 500, GID_F_LF => 2));
+
+        // --------------------------------------------------------------------
+        // Overview: foreign single fleets targeting the player's planets.
+        // --------------------------------------------------------------------
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ATTACK, 'start_planet' => $playerTwoHomeId, 'target_planet' => $homeId, 'flight_time' => 1200, GID_F_LF => 5));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_TRANSPORT, 'start_planet' => $playerTwoHomeId, 'target_planet' => $colonyId, 'flight_time' => 700, GID_F_SC => 3));
+        $addFleet (array ('owner_id' => 3, 'mission' => FTYP_SPY, 'start_planet' => $enemyHomeId, 'target_planet' => $homeId, 'flight_time' => 800, GID_F_PROBE => 2));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_DESTROY, 'start_planet' => $playerTwoHomeId, 'target_planet' => $moonId, 'flight_time' => 1400, GID_F_DEATHSTAR => 1));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ACS_ATTACK, 'start_planet' => $playerTwoHomeId, 'target_planet' => $homeId, 'flight_time' => 1000, GID_F_LF => 4));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ACS_ATTACK_HEAD, 'start_planet' => $playerTwoHomeId, 'target_planet' => $homeId, 'flight_time' => 1050, GID_F_LF => 6));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ACS_HOLD, 'start_planet' => $playerTwoHomeId, 'target_planet' => $homeId, 'flight_time' => 1000, 'deploy_time' => 1800, GID_F_LF => 3));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_MISSILE, 'start_planet' => $playerTwoHomeId, 'target_planet' => $homeId, 'flight_time' => 0, 'ipm_amount' => 2, 'ipm_target' => GID_D_RL));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_CUSTOM, 'start_planet' => $playerTwoHomeId, 'target_planet' => $homeId, 'flight_time' => 600, GID_F_LF => 1));
+
+        // --------------------------------------------------------------------
+        // Overview: ACS unions. A hostile union targets the player (the union
+        // fleets are assembled into one multi-fleet row); a friendly union
+        // contains the player and adds the union pseudo-return rows.
+        // --------------------------------------------------------------------
+        $hostileAcs = array ();
+        $hostileAcs[] = $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ACS_ATTACK, 'start_planet' => $playerTwoHomeId, 'target_planet' => $homeId, 'flight_time' => 1000, GID_F_LF => 4));
+        $hostileAcs[] = $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ACS_ATTACK, 'start_planet' => $playerTwoHomeId, 'target_planet' => $homeId, 'flight_time' => 1000, GID_F_LF => 6));
+        $this->attachEventUnion ($hostileAcs, 4, '2');
+
+        $friendlyAcs = array ();
+        $friendlyAcs[] = $addFleet (array ('owner_id' => 4, 'mission' => FTYP_ACS_ATTACK, 'start_planet' => $homeId, 'target_planet' => $enemyHomeId, 'flight_time' => 1000, GID_F_LF => 3));
+        $friendlyAcs[] = $addFleet (array ('owner_id' => 4, 'mission' => FTYP_ACS_ATTACK, 'start_planet' => $homeId, 'target_planet' => $enemyHomeId, 'flight_time' => 1000, GID_F_LF => 5));
+        $this->attachEventUnion ($friendlyAcs, 2, '4');
+
+        $ownAttackUnion = array ();
+        $ownAttackUnion[] = $addFleet (array ('owner_id' => 4, 'mission' => FTYP_ATTACK, 'start_planet' => $homeId, 'target_planet' => $enemyHomeId, 'flight_time' => 1000, GID_F_LF => 4));
+        $ownAttackUnion[] = $addFleet (array ('owner_id' => 4, 'mission' => FTYP_ATTACK, 'start_planet' => $homeId, 'target_planet' => $enemyHomeId, 'flight_time' => 1000, GID_F_LF => 7));
+        $this->attachEventUnion ($ownAttackUnion, 2, '4');
+
+        $hostileAttack = array ();
+        $hostileAttack[] = $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ATTACK, 'start_planet' => $playerTwoHomeId, 'target_planet' => $homeId, 'flight_time' => 1000, GID_F_LF => 5));
+        $hostileAttack[] = $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ATTACK, 'start_planet' => $playerTwoHomeId, 'target_planet' => $homeId, 'flight_time' => 1000, GID_F_LF => 8));
+        $this->attachEventUnion ($hostileAttack, 4, '2');
+
+        $hostileAcsHead = array ();
+        $hostileAcsHead[] = $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ACS_ATTACK_HEAD, 'start_planet' => $playerTwoHomeId, 'target_planet' => $homeId, 'flight_time' => 1000, GID_F_LF => 9));
+        $hostileAcsHead[] = $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ACS_ATTACK_HEAD, 'start_planet' => $playerTwoHomeId, 'target_planet' => $homeId, 'flight_time' => 1000, GID_F_LF => 11));
+        $this->attachEventUnion ($hostileAcsHead, 4, '2');
+
+        // --------------------------------------------------------------------
+        // Phalanx: fleets attached to the dedicated target planet. Pair
+        // missions get a departure and a return row; the special missions
+        // cover the hold/orbit and always-return branches.
+        // --------------------------------------------------------------------
+        foreach (array (FTYP_ATTACK, FTYP_ACS_ATTACK, FTYP_ACS_ATTACK_HEAD, FTYP_TRANSPORT, FTYP_SPY, FTYP_DESTROY) as $mission) {
+            $addFleet (array ('owner_id' => 2, 'mission' => $mission, 'start_planet' => $playerTwoHomeId, 'target_planet' => $phalanxTargetId, 'flight_time' => 1000, GID_F_LF => 4));
+            $addFleet (array ('owner_id' => 2, 'mission' => $mission, 'start_planet' => $phalanxTargetId, 'target_planet' => $playerTwoHomeId, 'flight_time' => 1000, GID_F_LF => 4));
+        }
+
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_DEPLOY, 'start_planet' => $playerTwoHomeId, 'target_planet' => $phalanxTargetId, 'flight_time' => 400, GID_F_LC => 2));
+
+        // ACS Hold: foreign departure (also adds the pseudo-hold row), own
+        // departure, orbiting hold and return.
+        $addFleet (array ('owner_id' => 3, 'mission' => FTYP_ACS_HOLD, 'start_planet' => $playerTwoHomeId, 'target_planet' => $phalanxTargetId, 'flight_time' => 900, 'deploy_time' => 1800, GID_F_LF => 3));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ACS_HOLD, 'start_planet' => $playerTwoHomeId, 'target_planet' => $phalanxTargetId, 'flight_time' => 900, 'deploy_time' => 1800, GID_F_LF => 4));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ACS_HOLD + FTYP_ORBITING, 'start_planet' => $phalanxTargetId, 'target_planet' => $playerTwoHomeId, 'flight_time' => 900, 'deploy_time' => 1800, GID_F_LF => 5));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ACS_HOLD + FTYP_RETURN, 'start_planet' => $phalanxTargetId, 'target_planet' => $playerTwoHomeId, 'flight_time' => 900, 'deploy_time' => 0, GID_F_LF => 6));
+
+        // Expedition: own departure (adds hold and return pseudo-rows),
+        // foreign departure, orbiting hold and return.
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_EXPEDITION, 'start_planet' => $playerTwoHomeId, 'target_planet' => $phalanxTargetId, 'flight_time' => 2000, 'deploy_time' => 3600, GID_F_LC => 1, GID_F_LF => 2, GID_F_PROBE => 1));
+        $addFleet (array ('owner_id' => 3, 'mission' => FTYP_EXPEDITION, 'start_planet' => $playerTwoHomeId, 'target_planet' => $phalanxTargetId, 'flight_time' => 2000, 'deploy_time' => 3600, GID_F_LC => 1, GID_F_LF => 2));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_EXPEDITION + FTYP_ORBITING, 'start_planet' => $phalanxTargetId, 'target_planet' => $playerTwoHomeId, 'flight_time' => 2000, 'deploy_time' => 3600, GID_F_LC => 1, GID_F_LF => 2));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_EXPEDITION + FTYP_RETURN, 'start_planet' => $phalanxTargetId, 'target_planet' => $playerTwoHomeId, 'flight_time' => 2000, 'deploy_time' => 0, GID_F_LC => 1, GID_F_LF => 2));
+
+        // Always-return and unconditional branches.
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_COLONIZE, 'start_planet' => $phalanxTargetId, 'target_planet' => $playerTwoHomeId, 'flight_time' => 700, GID_F_COLON => 1));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_RECYCLE, 'start_planet' => $phalanxTargetId, 'target_planet' => $playerTwoHomeId, 'flight_time' => 800, GID_F_RECYCLER => 2));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_MISSILE, 'start_planet' => $playerTwoHomeId, 'target_planet' => $phalanxTargetId, 'flight_time' => 0, 'ipm_amount' => 4, 'ipm_target' => GID_D_RL));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_CUSTOM, 'start_planet' => $playerTwoHomeId, 'target_planet' => $phalanxTargetId, 'flight_time' => 500, GID_F_LF => 2));
+        $addFleet (array ('owner_id' => 2, 'mission' => FTYP_CUSTOM, 'start_planet' => $phalanxTargetId, 'target_planet' => $playerTwoHomeId, 'flight_time' => 500, GID_F_LF => 2));
+
+        // Phalanx ACS union: all fleets attached to the union are assembled
+        // into a single multi-fleet row.
+        $phalanxAcs = array ();
+        $phalanxAcs[] = $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ACS_ATTACK, 'start_planet' => $playerTwoHomeId, 'target_planet' => $phalanxTargetId, 'flight_time' => 1000, GID_F_LF => 5));
+        $phalanxAcs[] = $addFleet (array ('owner_id' => 2, 'mission' => FTYP_ACS_ATTACK, 'start_planet' => $playerTwoHomeId, 'target_planet' => $phalanxTargetId, 'flight_time' => 1000, GID_F_LF => 7));
+        $this->attachEventUnion ($phalanxAcs, 2, '2');
+
+        return array (
+            'player_id' => 4,
+            'home_id' => $homeId,
+            'colony_id' => $colonyId,
+            'moon_id' => $moonId,
+            'phalanx_target_id' => $phalanxTargetId,
+        );
+    }
+
+    /**
+     * Attach the given fleets to a new ACS union.
+     *
+     * @param int[] $fleetIds Fleet ids of the union members.
+     * @param int $targetPlayer Player the union is flying against.
+     * @param string $players Comma-separated list of the union member ids.
+     * @return int The new union id.
+     */
+    private function attachEventUnion(array $fleetIds, int $targetPlayer, string $players): int
+    {
+        global $db_prefix;
+
+        if ($fleetIds === array ()) {
+            throw new RuntimeException("An event matrix union needs at least one fleet");
+        }
+        $unionId = AddDBRow (array (
+            'fleet_id' => $fleetIds[0],
+            'target_player' => $targetPlayer,
+            'name' => 'EVT',
+            'players' => $players,
+        ), 'union');
+        $ids = implode(',', array_map('intval', $fleetIds));
+        dbquery ("UPDATE {$db_prefix}fleet SET union_id = $unionId WHERE fleet_id IN ($ids)");
+        return $unionId;
+    }
+
     // ========================================================================
     // Realistic report text builders (issue #269)
     // ------------------------------------------------------------------------

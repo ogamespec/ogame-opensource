@@ -1,192 +1,14 @@
 <?php
 
 // Creating a list of Phalanx events.
-// TODO: There is some isomorphism with the Overview event module. If possible, unify the code for event list output.
 
 require_once "event_list.php";
-
-function FleetSpanAttack (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
-{
-    if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner ?? array()), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ATTACK")."</span>";
-    else echo "<span class='return phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_ATTACK")."</span></span>";
-}
-
-function FleetSpanAcsAttack (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
-{
-    if ( $dir == 0 ) echo "<span class='phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner ?? array()), PlanetFrom($origin, "federation"), PlanetTo($target, "federation")).
-        ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ACS_ATTACK")."</span>";
-    else echo "<span class='return phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_ACS_ATTACK")."</span></span>";
-}
-
-function FleetSpanTransport (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
-{
-    if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner ?? array()), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_TRANSPORT")."</span>";
-    else echo "<span class='return phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_TRANSPORT")."</span></span>";
-}
-
-function FleetSpanDeploy (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
-{
-    echo "<span class='flight phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner ?? array()), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_DEPLOY")."</span>";
-}
-
-function FleetSpanAcsHold (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
-{
-    if ( $dir == 2 ) echo "<span class='holding phalanx_fleet'>".va(loca("EVENT_FLEET_HOLD"),PlayerDetails($owner ?? array()),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_TO_ORBIT"), PlanetFrom($origin, "phalanx_fleet"), PlanetOn($target, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_HOLD")."</span></span>";
-    else if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner ?? array()), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_HOLD")."</span>";
-    else echo "<span class='return phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_HOLD")."</span></span>";
-}
-
-function FleetSpanSpy (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
-{
-    if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner ?? array()), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_SPY")."</span>";
-    else echo "<span class='return phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_SPY")."</span></span>";
-}
-
-function FleetSpanColonize (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
-{
-    echo "<span class='return phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_COLONY")."</span></span>";
-}
-
-function FleetSpanRecycle (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
-{
-    echo "<span class='return phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_RECYCLE")."</span></span>";
-}
-
-function FleetSpanDestroy (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
-{
-    if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner ?? array()), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_DESTROY")."</span>";
-    else echo "<span class='return phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_DESTROY")."</span></span>";
-}
-
-function FleetSpanAcsAttackHead (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
-{
-    if ( $dir == 0 ) echo "<span class='phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner ?? array()), PlanetFrom($origin, "attack"), PlanetTo($target, "attack")).
-        ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_ACS_ATTACK_HEAD")."</span>";
-    else echo "<span class='return phalanx_fleet'>".va(loca("EVENT_FLEET_ENEMY"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_ACS_ATTACK_HEAD")."</span></span>";
-}
-
-function FleetSpanExpedition (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
-{
-    if ( $dir == 2 ) echo "<span class='holding phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_EXPO_FROM_ONTO_PHALANX"), PlayerDetails($owner ?? array()), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_EXPO")."</span></span>";
-    else if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_PLAYER_FROM_TO"), PlayerDetails($owner ?? array()), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": ".loca("EVENT_M_EXPO")."</span>";
-    else echo "<span class='return phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("EVENT_M_EXPO")."</span></span>";
-}
-
-function FleetSpanMissile (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
-{
-    echo "<span class='missile'>" .va(loca("EVENT_RAK"), $fleet['ipm_amount'], PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")) . " ";
-    if ( $fleet['ipm_target'] > 0 ) echo loca("EVENT_RAK_TARGET") . " " . loca ("NAME_".$fleet['ipm_target']);
-    echo "</span>";
-}
-
-function FleetSpanCustom (int $dir, array $fleet, array|null $owner, array $origin, array $target) : void
-{
-    if ( $dir == 0 ) echo "<span class='flight phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_TO_PHALANX"), PlayerDetails($owner ?? array()), PlanetFrom($origin, "phalanx_fleet"), PlanetTo($target, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": ".loca("FLEET_ORDER_".$fleet['mission'])."</span>";
-    else echo "<span class='return phalanx_fleet'>".va(loca("EVENT_FLEET_FRIEND"),OverFleet($fleet,1,"phalanx_fleet",true))."</a><a href='#' title='".TitleFleet($fleet,1,true)."'></a>".
-        va(loca("EVENT_FROM_RETURN_TO_PHALANX"), PlanetFrom($target, "phalanx_fleet"), PlanetTo($origin, "phalanx_fleet")).
-        ". ".loca("EVENT_MISSION").": <span class='ownclass'>".loca("FLEET_ORDER_".$fleet['mission'])."</span></span>";
-}
-
-function FleetSpan ( array $fleet_entry ) : void
-{
-    $mission = $fleet_entry['mission'];
-    $origin = LoadPlanetById ( $fleet_entry['origin_id'] );
-    $target = LoadPlanetById ( $fleet_entry['target_id'] );
-    $fleet = $fleet_entry;
-    $dir = $fleet_entry['dir'];
-    $owner = LoadUser ( $origin['owner_id'] );
-
-    switch ($mission) {
-        case FTYP_ATTACK:
-            FleetSpanAttack ($dir, $fleet, $owner, $origin, $target);
-            break;
-        case FTYP_ACS_ATTACK:
-            FleetSpanAcsAttack ($dir, $fleet, $owner, $origin, $target);
-            break;
-        case FTYP_TRANSPORT:
-            FleetSpanTransport ($dir, $fleet, $owner, $origin, $target);
-            break;
-        case FTYP_DEPLOY:
-            FleetSpanDeploy ($dir, $fleet, $owner, $origin, $target);
-            break;
-        case FTYP_ACS_HOLD:
-            FleetSpanAcsHold ($dir, $fleet, $owner, $origin, $target);
-            break;
-        case FTYP_SPY:
-            FleetSpanSpy ($dir, $fleet, $owner, $origin, $target);
-            break;
-        case FTYP_COLONIZE:
-            FleetSpanColonize ($dir, $fleet, $owner, $origin, $target);
-            break;
-        case FTYP_RECYCLE:
-            FleetSpanRecycle ($dir, $fleet, $owner, $origin, $target);
-            break;
-        case FTYP_DESTROY:
-            FleetSpanDestroy ($dir, $fleet, $owner, $origin, $target);
-            break;
-        case FTYP_ACS_ATTACK_HEAD:    // ACS Attack Head fleet (slot 0)
-            FleetSpanAcsAttackHead ($dir, $fleet, $owner, $origin, $target);
-            break;
-        case FTYP_EXPEDITION:
-            FleetSpanExpedition ($dir, $fleet, $owner, $origin, $target);
-            break;
-        case FTYP_MISSILE:
-            FleetSpanMissile ($dir, $fleet, $owner, $origin, $target);
-            break;
-        default:
-            FleetSpanCustom  ($dir, $fleet, $owner, $origin, $target);
-            break;
-    }
-}
 
 function PhalanxEventList (int $planet_id) : void
 {
     $planet = LoadPlanetById ($planet_id);
     /** @var array $user */
     $user = LoadUser ($planet['owner_id']);
-    global $fleetmap;
     $result = EnumPlanetFleets ( $planet_id );
     $rows = dbrows ( $result );
 
@@ -213,13 +35,7 @@ function PhalanxEventList (int $planet_id) : void
             {
                 $fleet_obj = dbarray ($acs_result);
 
-                $task[$tasknum]['fleet'][$f] = array ();
-                foreach ( $fleetmap as $id=>$gid ) $task[$tasknum]['fleet'][$f][$gid] = $fleet_obj[$gid];
-                $task[$tasknum]['fleet'][$f]['owner_id'] = $fleet_obj['owner_id'];
-                $task[$tasknum]['fleet'][$f]['origin_id'] = $fleet_obj['start_planet'];
-                $task[$tasknum]['fleet'][$f]['target_id'] = $fleet_obj['target_planet'];
-                $task[$tasknum]['fleet'][$f]['mission'] = GetMission ($fleet_obj);
-                $task[$tasknum]['fleet'][$f]['dir'] = 0;    // to the planet
+                $task[$tasknum]['fleet'][$f] = EventFleetRow ($fleet_obj, $fleet_obj['start_planet'], $fleet_obj['target_planet'], GetMission ($fleet_obj), 0);
                 $f++;
             }
             // Mark that this ACS union has been processed and ignore the rest of the fleets on further enumeration
@@ -247,13 +63,7 @@ function PhalanxEventList (int $planet_id) : void
 
             // Fleet
             $task[$tasknum]['fleets'] = 1;
-            $task[$tasknum]['fleet'][0] = array ();
-            foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj[$gid];
-            $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
-            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
-            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
-            $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
-            $task[$tasknum]['fleet'][0]['dir'] = 2;
+            $task[$tasknum]['fleet'][0] = EventFleetRow ($fleet_obj, $fleet_obj['start_planet'], $fleet_obj['target_planet'], GetMission ($fleet_obj), 2);
             $tasknum++;
         }
 
@@ -265,13 +75,7 @@ function PhalanxEventList (int $planet_id) : void
 
             // Fleet
             $task[$tasknum]['fleets'] = 1;
-            $task[$tasknum]['fleet'][0] = array ();
-            foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj[$gid];
-            $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
-            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
-            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
-            $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
-            $task[$tasknum]['fleet'][0]['dir'] = 2;
+            $task[$tasknum]['fleet'][0] = EventFleetRow ($fleet_obj, $fleet_obj['start_planet'], $fleet_obj['target_planet'], GetMission ($fleet_obj), 2);
             $tasknum++;
         }
 
@@ -283,35 +87,20 @@ function PhalanxEventList (int $planet_id) : void
         else $task[$tasknum]['end_time'] = $queue['end'];
 
         // Fleet
-        $task[$tasknum]['fleets'] = 1;
-        $task[$tasknum]['fleet'][0] = array ();
-        foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj[$gid];
-        $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
-        $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
-        $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
-        $task[$tasknum]['fleet'][0]['mission'] = GetMission ( $fleet_obj );
-        if ( GetMission($fleet_obj) == FTYP_EXPEDITION )
+        if ( GetMission($fleet_obj) == FTYP_EXPEDITION || GetMission($fleet_obj) == FTYP_ACS_HOLD )
         {
-            if ($fleet_obj['mission'] < FTYP_RETURN) $task[$tasknum]['fleet'][0]['dir'] = 0;
-            else if ($fleet_obj['mission'] < FTYP_ORBITING) $task[$tasknum]['fleet'][0]['dir'] = 1;
-            else $task[$tasknum]['fleet'][0]['dir'] = 2;
-        }
-        else if ( GetMission($fleet_obj) == FTYP_ACS_HOLD )
-        {
-            if ($fleet_obj['mission'] < FTYP_RETURN) $task[$tasknum]['fleet'][0]['dir'] = 0;
-            else if ($fleet_obj['mission'] < FTYP_ORBITING) $task[$tasknum]['fleet'][0]['dir'] = 1;
-            else $task[$tasknum]['fleet'][0]['dir'] = 2;
+            if ($fleet_obj['mission'] < FTYP_RETURN) $dir = 0;
+            else if ($fleet_obj['mission'] < FTYP_ORBITING) $dir = 1;
+            else $dir = 2;
         }
         else
         {
-            if ( $fleet_obj['target_planet'] == $planet_id ) $task[$tasknum]['fleet'][0]['dir'] = 0;    // to the planet
-            else $task[$tasknum]['fleet'][0]['dir'] = 1;    // return
+            if ( $fleet_obj['target_planet'] == $planet_id ) $dir = 0;    // to the planet
+            else $dir = 1;    // return
         }
-        if ($fleet_obj['mission'] == FTYP_MISSILE)
-        {
-            $task[$tasknum]['fleet'][0]['ipm_amount'] = $fleet_obj['ipm_amount'];
-            $task[$tasknum]['fleet'][0]['ipm_target'] = $fleet_obj['ipm_target'];
-        }
+
+        $task[$tasknum]['fleets'] = 1;
+        $task[$tasknum]['fleet'][0] = EventFleetRow ($fleet_obj, $fleet_obj['start_planet'], $fleet_obj['target_planet'], GetMission ( $fleet_obj ), $dir);
 
         $tasknum++;
 
@@ -324,50 +113,13 @@ function PhalanxEventList (int $planet_id) : void
 
             // Fleet
             $task[$tasknum]['fleets'] = 1;
-            $task[$tasknum]['fleet'][0] = array ();
-            foreach ( $fleetmap as $i=>$gid ) $task[$tasknum]['fleet'][0][$gid] = $fleet_obj[$gid];
-            $task[$tasknum]['fleet'][0]['owner_id'] = $fleet_obj['owner_id'];
-            $task[$tasknum]['fleet'][0]['origin_id'] = $fleet_obj['start_planet'];
-            $task[$tasknum]['fleet'][0]['target_id'] = $fleet_obj['target_planet'];
-            $task[$tasknum]['fleet'][0]['mission'] = GetMission ($fleet_obj);
-            $task[$tasknum]['fleet'][0]['dir'] = 1;
+            $task[$tasknum]['fleet'][0] = EventFleetRow ($fleet_obj, $fleet_obj['start_planet'], $fleet_obj['target_planet'], GetMission ($fleet_obj), 1);
             $tasknum++;
         }
 
     }
 
-    $anz = 0;
-    if ($tasknum > 0)
-    {
-        sksort ( $task, 'end_time', true);        // Sort by time of arrival.
-        $now = time ();
-
-        // Number the countdown boxes with a dedicated running counter ($n):
-        // t() in utilities.js expects exactly the ids bxx1..bxx(anz). Rows
-        // whose end time already passed are skipped, so the array key ($i)
-        // would leave holes and break every countdown.
-        $n = 0;
-        foreach ($task as $i=>$t)
-        {
-            $seconds = max($t['end_time']-$now, 0);
-            if ( $seconds <= 0 ) continue;
-            $n++;
-            if ($t['fleets'] > 1) echo "<tr class=''>\n";
-            else if ($t['fleet'][0]['dir'] == 0) echo "<tr class='flight'>\n";
-            else if ($t['fleet'][0]['dir'] == 1) echo "<tr class='return'>\n";
-            else if ($t['fleet'][0]['dir'] == 2) echo "<tr class='holding'>\n";
-            echo "<th><div id='bxx".$n."' title='".$seconds."'star='".$t['end_time']."'></div></th>\n";
-            echo "<th colspan='3'>";
-            for ($fl=0; $fl<$t['fleets']; $fl++)
-            {
-                FleetSpan ($t['fleet'][$fl]);
-                if ($t['fleets'] > 1) echo "<br /><br />";
-            }
-            echo "</th></tr>\n\n";
-            $anz++;
-        }
-        if ($anz) echo "<script language=javascript>anz=".$anz.";t();</script>\n\n";
-    }
+    EventListOutput ($task, EVENT_LIST_PHALANX);
 }
 
 ?>
