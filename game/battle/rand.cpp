@@ -68,6 +68,7 @@ void MySrand(unsigned long seed)
 // Return a random number between a and b (including a and b)
 unsigned long MyRand(unsigned long a, unsigned long b)
 {
-    return a + (unsigned long)(genrand_real1() * (b - a + 1));
+    unsigned long r = a + (unsigned long)(genrand_real1() * (b - a + 1));
+    return r > b ? b : r;   // genrand_real1() can return exactly 1.0 and then r == b + 1
     //return a + (unsigned long)((rand ()*(1.0/RAND_MAX)) * (b - a + 1));
 }
