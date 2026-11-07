@@ -919,6 +919,11 @@ function StartResearch (int $player_id, int $planet_id, int $id, int $now) : str
     global $db_prefix, $GlobalUni;
     $uni = $GlobalUni;
 
+    // A zero timestamp means "now". Resolve it before the planet update: a
+    // literal 0 used to advance the planet with a negative time delta, which
+    // clamped its resources to zero (bot API path).
+    if ($now == 0) $now = time ();
+
     $planet = GetUpdatePlanet ( $planet_id, $now );
     if ($planet == null) return "";
 
@@ -938,7 +943,6 @@ function StartResearch (int $player_id, int $planet_id, int $id, int $now) : str
 
     if ( $text === "" ) {
         $speed = $uni['speed'];
-        if ($now == 0) $now = time ();
         $reslab = ResearchNetwork ( $planet['planet_id'], $id );
         $seconds = TechDuration ( $id, $level, PROD_RESEARCH_DURATION_FACTOR, $reslab, 0, $speed * $r_factor);
 
