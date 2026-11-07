@@ -507,6 +507,12 @@ function HasPlanet (int $g, int $s, int $p) : bool
 /**
  * Change the amount of resources on the planet.
  *
+ * The planet clock (lastpeek) is deliberately left untouched: it may only be
+ * advanced by GetUpdatePlanet(), which credits the production for the elapsed
+ * interval. Stamping lastpeek = time() here used to throw away the production
+ * accrued since the last update, which broke plunder and fleet returns when a
+ * late queued event was replayed after a long offline period (issue #158).
+ *
  * @param array $cost Resource amounts to add or subtract.
  * @param int $planet_id ID of the planet.
  * @param string $sign Sign of the operation: "+" to add, "-" to subtract.
@@ -518,8 +524,7 @@ function AdjustResources (array $cost, int $planet_id, string $sign) : void
     global $resourcemap;
     $planet = LoadPlanetById ($planet_id);
     if ($planet === null) return;
-    $now = time ();
-    $query = "UPDATE ".$db_prefix."planets SET ";
+    $set = "";
     foreach ($resourcemap as $i=>$rc) {
         if (isset($cost[$rc]) && $cost[$rc] && isset($planet[$rc])) {
             // Apply the addition/subtraction in PHP and clamp the result so the
@@ -530,10 +535,11 @@ function AdjustResources (array $cost, int $planet_id, string $sign) : void
             $amount = $cost[$rc];
             if ($sign === '-') $amount = -$amount;
             $value = max (0, $planet[$rc] + $amount);
-            $query .= "`".$rc."`=".$value.", ";
+            $set .= "`".$rc."`=".$value.", ";
         }
     }
-    $query .= "lastpeek = ".$now." WHERE planet_id=$planet_id;";
+    if ($set === "") return;
+    $query = "UPDATE ".$db_prefix."planets SET " . rtrim ($set, ", ") . " WHERE planet_id=$planet_id;";
     dbquery ($query);
 }
 

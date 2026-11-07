@@ -1213,21 +1213,19 @@ class BotCoreTest extends TestCase
     }
 
     /**
-     * BUG: BotResearch hands StartResearch a timestamp of 0. StartResearch runs
-     * GetUpdatePlanet($planet, 0) before it falls back to time(), so the
-     * production update is applied with a negative time delta: the planet's
-     * stored resources are clamped to zero and lastpeek becomes 0, after which
-     * the resource check of CanResearch fails. BotResearch therefore always
-     * returns 0 instead of starting the research - and it damages the planet.
-     * This test documents the current behaviour.
+     * BotResearch must actually start the research. It used to pass a timestamp
+     * of 0 to StartResearch, which called GetUpdatePlanet($planet, 0) with a
+     * negative time delta: the planet was wiped (resources clamped to zero,
+     * lastpeek 0) and the following resource check always failed, so the bot
+     * could never research and damaged the planet in the process.
      */
-    public function testBotResearchCannotStartAndWipesThePlanetState () : void
+    public function testBotResearchStartsTheResearchWithoutWipingThePlanet () : void
     {
         global $BotID, $BotNow;
         $BotID = 1;
         $BotNow = time ();
 
-        // Free the research queue so that only the resource check can fail.
+        // Free the research queue so that only the resource check could fail.
         dbquery ("DELETE FROM {$this->prefix}queue WHERE type = '".QTYP_RESEARCH."' AND owner_id = 1");
 
         $before = LoadPlanetById (1);
@@ -1236,16 +1234,15 @@ class BotCoreTest extends TestCase
 
         $seconds = BotResearch (GID_R_ARMOUR);
 
-        $this->assertSame (0, $seconds);
-        $this->assertSame (0, count ($this->queueRows (1, QTYP_RESEARCH)));
+        $this->assertGreaterThan (0, $seconds);
+        $rows = $this->queueRows (1, QTYP_RESEARCH);
+        $this->assertSame (1, count ($rows));
+        $this->assertSame (GID_R_ARMOUR, (int)$rows[0]['obj_id']);
 
+        // The planet is intact: the research was paid for, nothing was wiped.
         $after = LoadPlanetById (1);
-        $this->assertSame (0, (int)$after[GID_RC_METAL]);
-        $this->assertSame (0, (int)$after[GID_RC_CRYSTAL]);
-        $this->assertSame (0, (int)$after['lastpeek']);
-
-        // BotCanResearch (which is given a real timestamp) still reports the
-        // research as possible - the two bot API calls contradict each other.
-        $this->assertTrue (BotCanResearch (GID_R_ARMOUR));
+        $this->assertGreaterThan (0, (int)$after[GID_RC_METAL]);
+        $this->assertGreaterThan (0, (int)$after[GID_RC_CRYSTAL]);
+        $this->assertGreaterThan (0, (int)$after['lastpeek']);
     }
 }

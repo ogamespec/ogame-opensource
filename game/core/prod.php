@@ -511,7 +511,12 @@ function GetUpdatePlanet ( int $planet_id, int $time_to) : array|null
         $planet['max'.$rc] = store_capacity ( $planet[$gid] );
     }
 
-    $time_from = $planet['lastpeek'];
+    $time_from = (int)$planet['lastpeek'];
+    // Never run the planet clock backwards. A late queued event (or a planet
+    // that was already advanced to the wall clock) may carry a timestamp older
+    // than lastpeek; the negative interval used to subtract production and
+    // rewind lastpeek, corrupting the stored resources (issue #158).
+    if ($time_to < $time_from) $time_to = $time_from;
     $diff = $time_to - $time_from;
 
     // Calculate resource growth (only for resources that change over time)

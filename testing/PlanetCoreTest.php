@@ -771,10 +771,15 @@ class PlanetCoreTest extends TestCase
 
     /**
      * AdjustResources adds and subtracts quantities and clamps the stored
-     * amount at zero; an unknown planet id is ignored.
+     * amount at zero; an unknown planet id is ignored. The planet clock
+     * (lastpeek) is not touched: only GetUpdatePlanet() may advance it, or the
+     * production accrued since the last update would be lost (issue #158).
      */
     public function testAdjustResourcesAddsSubtractsAndClamps() : void
     {
+        $before = LoadPlanetById(1);
+        $lastpeek = (int) $before['lastpeek'];
+
         $this->assertSame(25000, (int) $this->planetField(1, (string) GID_RC_METAL));
 
         AdjustResources(array (GID_RC_METAL => 1000), 1, '+');
@@ -790,7 +795,9 @@ class PlanetCoreTest extends TestCase
 
         // Unknown planet: silently ignored.
         AdjustResources(array (GID_RC_METAL => 5), 999999, '-');
-        $this->assertEqualsWithDelta(time(), (int) $this->planetField(1, 'lastpeek'), 5);
+
+        $this->assertSame($lastpeek, (int) $this->planetField(1, 'lastpeek'),
+            'AdjustResources must leave lastpeek to GetUpdatePlanet().');
     }
 
     /**
