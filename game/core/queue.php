@@ -375,7 +375,15 @@ function PropagateBuildQueue (int $planet_id, int $from) : void
 
     $speed = $GlobalUni['speed'];
 
-    $planet = LoadPlanetById ( $planet_id );
+    // The next order must be checked against the same planet row the order was
+    // accepted with: GetUpdatePlanet() advances the production and publishes
+    // the virtual energy resource (GID_RC_ENERGY) that CanBuild() and
+    // IsEnoughResources() rely on. A raw LoadPlanetById() row has no energy at
+    // all, so every queued order used to be rejected and silently dropped with
+    // a "not enough resources" message, even on a planet with millions
+    // (issue #299: the Commander build queue stopped working).
+    $planet = GetUpdatePlanet ( $planet_id, $from );
+    if ($planet == null) return;
     $user = LoadUser ( $planet['owner_id'] );
     if ($user == null) return;
 

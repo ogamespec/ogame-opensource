@@ -916,17 +916,19 @@ class BotCoreTest extends TestCase
     }
 
     /**
-     * BUG: BotBuild always fails. It passes the raw LoadPlanetById() row to
-     * CanBuild(), and that row carries no virtual energy value
-     * (GID_RC_ENERGY); TechPrice() lists every resource (with 0 for the ones a
-     * building does not cost), so IsEnoughResources() runs into its "unknown
-     * resource type" branch for the zero-cost energy entry and CanBuild()
-     * answers "You don't have enough resources!" - even though BotCanBuild()
-     * (which runs the same checks against GetUpdatePlanet()) accepts the very
-     * same order. This test documents the current behaviour: the building is
-     * never queued and no resources are written off.
+     * BotBuild starts the building on the active planet: the order is queued,
+     * the resources are written off and the duration is returned.
+     *
+     * Regression test for issue #299: BotBuild used to pass the raw
+     * LoadPlanetById() row to CanBuild(), and that row carries no virtual
+     * energy value (GID_RC_ENERGY). TechPrice() lists every resource (with 0
+     * for the ones a building does not cost), so IsEnoughResources() ran into
+     * its "unknown resource type" branch for the zero-cost energy entry and
+     * CanBuild() answered "You don't have enough resources!" - even though
+     * BotCanBuild() (which runs the same checks against GetUpdatePlanet())
+     * accepted the very same order.
      */
-    public function testBotBuildAlwaysFailsOnItsRawPlanetRow () : void
+    public function testBotBuildStartsTheBuilding () : void
     {
         global $BotID, $BotNow;
         $BotID = 1;
@@ -934,20 +936,25 @@ class BotCoreTest extends TestCase
         $this->freeFields (1);
         $this->clearBuildQueue (1);
 
-        $this->assertTrue (BotCanBuild (GID_B_METAL_MINE));        // GetUpdatePlanet row: buildable
+        $this->assertTrue (BotCanBuild (GID_B_METAL_MINE));
 
-        $planet = LoadPlanetById (1);
-        $this->assertArrayNotHasKey (GID_RC_ENERGY, $planet);      // LoadPlanetById row: no energy
-        $this->assertFalse (IsEnoughResources (LoadUser (1), $planet,
-            TechPrice (GID_B_METAL_MINE, (int)$planet[GID_B_METAL_MINE] + 1)));
+        $before = LoadPlanetById (1);
+        $level = (int)$before[GID_B_METAL_MINE] + 1;
 
-        $this->assertSame (0, BotBuild (GID_B_METAL_MINE));
-        $this->assertSame (0, count ($this->selectRows ("SELECT * FROM {$this->prefix}buildqueue WHERE planet_id = 1")));
-        $this->assertSame (0, count ($this->queueRows (1, QTYP_BUILD)));
+        $this->assertGreaterThan (0, BotBuild (GID_B_METAL_MINE));
 
-        // Nothing was written off either.
+        // The order is in the build queue and has its own event.
+        $rows = $this->selectRows ("SELECT * FROM {$this->prefix}buildqueue WHERE planet_id = 1");
+        $this->assertCount (1, $rows);
+        $this->assertSame (GID_B_METAL_MINE, (int)$rows[0]['tech_id']);
+        $this->assertSame ($level, (int)$rows[0]['level']);
+        $this->assertSame (1, (int)$rows[0]['list_id']);
+        $this->assertCount (1, $this->queueRows (1, QTYP_BUILD));
+
+        // The resources are written off.
         $after = LoadPlanetById (1);
-        $this->assertGreaterThanOrEqual ((float)$planet[GID_RC_METAL], (float)$after[GID_RC_METAL]);
+        $this->assertLessThan ((float)$before[GID_RC_METAL], (float)$after[GID_RC_METAL]);
+        $this->assertLessThan ((float)$before[GID_RC_CRYSTAL], (float)$after[GID_RC_CRYSTAL]);
     }
 
     /**

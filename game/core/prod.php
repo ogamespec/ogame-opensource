@@ -163,13 +163,22 @@ function ResearchNetwork ( int $planetid, int $id ) : int
 function IsEnoughResources (array $user, array $planet, array $cost) : bool
 {
     foreach ($cost as $rc=>$value) {
+        // A non-positive requirement can never be underpaid, so it is skipped
+        // before the holder lookup. TechPrice() always lists every resource of
+        // $resourcemap (0 for the ones the object does not cost), while energy
+        // is virtual: it exists only in a GetUpdatePlanet() row, never in a raw
+        // LoadPlanetById() row or on a moon. Those zero-cost entries used to
+        // fall through to the "unknown resource" branch below and reject an
+        // affordable order (issue #299).
+        if ( $value <= 0 ) continue;
+
         if (isset($user[$rc])) {
-            if ($value > 0 && $user[$rc] < $value) {
+            if ($user[$rc] < $value) {
                 return false;
             }
         }
         else if (isset($planet[$rc])) {
-            if ($value > 0 && $planet[$rc] < $value) {
+            if ($planet[$rc] < $value) {
                 return false;
             }
         }
