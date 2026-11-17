@@ -775,6 +775,59 @@ class QueueCoreTest extends TestCase
     }
 
     /**
+     * The Commander build queue really builds its orders: five slots can be
+     * queued and each completion starts the next one (regression test for
+     * issue #299, "the build queue stopped working for the Commander").
+     *
+     * A slot that is queued but not started yet is not paid for; the price is
+     * charged when PropagateBuildQueue() starts it.
+     */
+    public function testCommanderBuildQueueRunsAllFiveSlots (): void
+    {
+        $this->preparePlanet (2, 1000000, 1000000, 1000000, 50);
+        $this->allowStats (1);
+        $user = LoadUser (1);
+        $prem = PremiumStatus ($user);
+        $this->assertTrue ($prem['commander'], 'player 1 is a Commander in the fixture');
+
+        // Queue five metal storage levels (4..8), one per second: builds added
+        // in the same second are rejected by design.
+        for ($i = 0; $i < 5; $i++) {
+            $this->assertSame ('', BuildEnque ($user, 2, GID_B_METAL_STOR, 0, $this->now + $i + 1));
+        }
+
+        $rows = $this->buildQueueRows (2);
+        $this->assertCount (5, $rows, 'a Commander may queue five orders');
+        $ids = array ();
+        foreach ($rows as $row) $ids[] = (int)$row['id'];
+        $in = implode (',', $ids);
+        $this->assertSame (1, $this->countQueue ("type = '".QTYP_BUILD."' AND sub_id IN ($in)"), 'only the running slot has an event');
+
+        // The sixth order is rejected because the queue is full (BuildEnque
+        // reports no error in that case, so the queue length is the assertion).
+        $this->assertSame ('', BuildEnque ($user, 2, GID_B_METAL_STOR, 0, $this->now + 10));
+        $this->assertCount (5, $this->buildQueueRows (2), 'a sixth order must not enter the queue');
+
+        // Complete the slots one by one; every completion starts the next one.
+        for ($i = 0; $i < 5; $i++) {
+            $rows = $this->buildQueueRows (2);
+            $this->assertNotEmpty ($rows, 'slot ' . ($i + 1) . ' must still be queued');
+            $this->assertSame ($i + 4, (int)$rows[0]['level'], 'slot ' . ($i + 1) . ' builds level ' . ($i + 4));
+
+            $events = $this->queueRows ("type = '".QTYP_BUILD."' AND sub_id = " . (int)$rows[0]['id']);
+            $this->assertCount (1, $events, 'slot ' . ($i + 1) . ' must be running');
+
+            Queue_Build_End (LoadQueue ((int)$events[0]['task_id']));
+
+            $this->assertSame ($i + 4, (int)$this->planetField (2, GID_B_METAL_STOR), 'level after slot ' . ($i + 1));
+        }
+
+        $this->assertSame (8, (int)$this->planetField (2, GID_B_METAL_STOR), 'all five levels were built');
+        $this->assertSame (0, $this->countBuildQueue (2), 'the queue is empty');
+        $this->assertSame (0, $this->countQueue ("type = '".QTYP_BUILD."' AND sub_id IN ($in)"), 'no events are left behind');
+    }
+
+    /**
      * BuildEnque refuses a build the planet cannot pay for and ignores an
      * unknown planet and a frozen universe.
      */
@@ -855,76 +908,138 @@ class QueueCoreTest extends TestCase
     }
 
     /**
-     * BUG: PropagateBuildQueue never starts the queued construction.
+     * PropagateBuildQueue starts the queued construction: it charges the
+     * resources, creates the completion event and rewrites the start and end
+     * times of the buildqueue row.
      *
-     * It loads the planet with LoadPlanetById(), whose row carries no virtual
-     * energy value (GID_RC_ENERGY). TechPrice() lists every resource of
-     * $resourcemap (with 0 for the ones the building does not cost), so
-     * IsEnoughResources() hits its "unknown resource type that neither the
-     * player nor the planet has" branch for the zero-cost energy entry and
-     * answers false - even though the very same order is accepted when the
-     * planet row comes from GetUpdatePlanet() (which sets GID_RC_ENERGY).
-     *
-     * This test documents the current behaviour: the queued construction is
-     * deleted, no event is created, no resources are written off and the owner
-     * gets a "not enough resources" system message although the planet has
-     * millions. (BotCoreTest documents the same root cause for BotBuild.)
+     * Regression test for issue #299 ("the build queue stopped working for the
+     * Commander"). The propagation used to load the planet with
+     * LoadPlanetById(), whose row carries no virtual energy value
+     * (GID_RC_ENERGY). TechPrice() lists every resource of $resourcemap (with 0
+     * for the ones the building does not cost), so IsEnoughResources() hit its
+     * "unknown resource type that neither the player nor the planet has" branch
+     * for the zero-cost energy entry and answered false: the queued
+     * construction was dropped with a "not enough resources" message even
+     * though the planet had millions.
      */
-    public function testPropagateBuildQueueDropsTheNextBuildBecauseOfTheRawPlanetRow (): void
+    public function testPropagateBuildQueueStartsTheNextBuild (): void
     {
+        global $GlobalUni;
+
         $this->preparePlanet (2, 1000000, 1000000, 1000000, 50);
         $bq = $this->addBuildQueueRow (1, 2, 1, GID_B_METAL_STOR, 4, 0, $this->now, $this->now + 10);
         $before = $this->planetResources (2);
         $messagesBefore = $this->countMessages (1);
         $from = $this->now + 60;
 
-        // The two planet representations disagree about the energy resource.
+        // The raw row still has no energy, but a zero-cost energy entry no
+        // longer rejects an otherwise affordable order.
         $raw = LoadPlanetById (2);
-        $updated = GetUpdatePlanet (2, $this->now);
         $cost = TechPrice (GID_B_METAL_STOR, 4);
         $this->assertArrayNotHasKey (GID_RC_ENERGY, $raw);
-        $this->assertArrayHasKey (GID_RC_ENERGY, $updated);
-        $this->assertFalse (IsEnoughResources (LoadUser (1), $raw, $cost));
-        $this->assertTrue (IsEnoughResources (LoadUser (1), $updated, $cost));
-        $this->assertSame (loca_lang ('BUILD_ERROR_NO_RES', 'en'), CanBuild (LoadUser (1), $raw, GID_B_METAL_STOR, 4, false));
-        $this->assertSame ('', CanBuild (LoadUser (1), $updated, GID_B_METAL_STOR, 4, false));
+        $this->assertTrue (IsEnoughResources (LoadUser (1), $raw, $cost));
+        $this->assertSame ('', CanBuild (LoadUser (1), $raw, GID_B_METAL_STOR, 4, false));
 
         PropagateBuildQueue (2, $from);
 
-        // Current behaviour: the build is dropped instead of started.
-        $this->assertSame (0, $this->countBuildQueue (2));
-        $this->assertSame (0, $this->countQueue ("type = '".QTYP_BUILD."' AND sub_id = $bq"));
-        $this->assertSame ($before, $this->planetResources (2), 'the dropped build must not charge any resources');
-        $this->assertSame ($messagesBefore + 1, $this->countMessages (1));
+        // The order stays in the build queue and now has an event of its own.
+        $rows = $this->buildQueueRows (2);
+        $this->assertCount (1, $rows);
+        $this->assertSame ($bq, (int)$rows[0]['id']);
 
-        $msg = dbarray (dbquery ("SELECT * FROM ".$this->dbPrefix."messages WHERE owner_id = 1 ORDER BY msg_id DESC LIMIT 1"));
-        $this->assertSame (loca_lang ('BUILD_MSG_SUBJ', 'en'), $msg['subj']);
-        $this->assertStringContainsString (loca_lang ('BUILD_ERROR_NO_RES', 'en'), $msg['text']);
+        $events = $this->queueRows ("type = '".QTYP_BUILD."' AND sub_id = $bq");
+        $this->assertCount (1, $events);
+        $this->assertSame (1, (int)$events[0]['owner_id']);
+        $this->assertSame (GID_B_METAL_STOR, (int)$events[0]['obj_id']);
+        $this->assertSame (4, (int)$events[0]['level']);
+        $this->assertSame ($from, (int)$events[0]['start']);
+        $this->assertSame (QUEUE_PRIO_BUILD, (int)$events[0]['prio']);
+
+        // The buildqueue row carries the same construction interval.
+        $duration = (int)floor (TechDuration (GID_B_METAL_STOR, 4, PROD_BUILDING_DURATION_FACTOR,
+            (int)$this->planetField (2, GID_B_ROBOTS), (int)$this->planetField (2, GID_B_NANITES), $GlobalUni['speed']));
+        $this->assertSame ($from, (int)$rows[0]['start']);
+        $this->assertSame ($from + $duration, (int)$rows[0]['end']);
+
+        // The started construction is paid for, and nobody is told otherwise.
+        $after = $this->planetResources (2);
+        $this->assertSame ($before[GID_RC_METAL] - (int)$cost[GID_RC_METAL], $after[GID_RC_METAL]);
+        $this->assertSame ($messagesBefore, $this->countMessages (1));
     }
 
     /**
-     * End-to-end consequence of the bug above: when the first construction of
-     * a two-slot build queue completes, the queued second slot is dropped
-     * instead of started, even though the planet can easily pay for it.
+     * The same propagation starts a lunar order: a moon is not a production
+     * object, so its GetUpdatePlanet() row carries no energy resource at all
+     * and the zero-cost energy entry of TechPrice() must not reject the order.
      */
-    public function testQueueBuildEndDropsTheQueuedSecondSlot (): void
+    public function testPropagateBuildQueueStartsAMoonBuild (): void
+    {
+        $moon = $this->moonOf (1);
+        $moonId = (int)$moon['planet_id'];
+        dbquery ("UPDATE ".$this->dbPrefix."planets SET `".GID_RC_METAL."` = 2000000, `".GID_RC_CRYSTAL."` = 2000000, "
+            . "`".GID_RC_DEUTERIUM."` = 2000000 WHERE planet_id = $moonId");
+
+        // Lunar Base 5 -> 6; a moon is never a production planet.
+        $bq = $this->addBuildQueueRow (1, $moonId, 1, GID_B_LUNAR_BASE, 6, 0, $this->now, $this->now + 10);
+        $before = $this->planetResources ($moonId);
+        $from = $this->now + 60;
+
+        PropagateBuildQueue ($moonId, $from);
+
+        $events = $this->queueRows ("type = '".QTYP_BUILD."' AND sub_id = $bq");
+        $this->assertCount (1, $events, 'an affordable lunar order must start');
+        $this->assertSame (GID_B_LUNAR_BASE, (int)$events[0]['obj_id']);
+        $this->assertSame ($from, (int)$events[0]['start']);
+
+        $cost = TechPrice (GID_B_LUNAR_BASE, 6);
+        $after = $this->planetResources ($moonId);
+        $this->assertSame ($before[GID_RC_METAL] - (int)$cost[GID_RC_METAL], $after[GID_RC_METAL]);
+        $this->assertSame ($before[GID_RC_CRYSTAL] - (int)$cost[GID_RC_CRYSTAL], $after[GID_RC_CRYSTAL]);
+    }
+
+    /**
+     * When the first construction of a two-slot build queue completes, the
+     * queued second slot is started and paid for instead of being dropped
+     * (end-to-end regression test for issue #299).
+     */
+    public function testQueueBuildEndStartsTheQueuedSecondSlot (): void
     {
         $this->preparePlanet (2, 1000000, 1000000, 1000000, 50);
-        dbquery ("UPDATE ".$this->dbPrefix."planets SET `".GID_B_METAL_STOR."` = 3, `".GID_B_CRYS_MINE."` = 2, fields = 12 WHERE planet_id = 2");
+        dbquery ("UPDATE ".$this->dbPrefix."planets SET `".GID_B_METAL_STOR."` = 3, `".GID_B_CRYS_STOR."` = 3, fields = 12 WHERE planet_id = 2");
         $this->allowStats (1);
 
         $first = $this->addBuildQueueRow (1, 2, 1, GID_B_METAL_STOR, 4, 0, $this->now - 600, $this->now);
-        $second = $this->addBuildQueueRow (1, 2, 2, GID_B_CRYS_MINE, 3, 0, $this->now, $this->now + 600);
+        $second = $this->addBuildQueueRow (1, 2, 2, GID_B_CRYS_STOR, 4, 0, $this->now, $this->now + 600);
         $task = AddQueue (1, QTYP_BUILD, $first, GID_B_METAL_STOR, 4, $this->now - 600, 600, QUEUE_PRIO_BUILD);
+
+        $before = $this->planetResources (2);
+        $messagesBefore = $this->countMessages (1);
 
         Queue_Build_End (LoadQueue ($task));
 
         // The first building is completed ...
         $this->assertSame (4, (int)$this->planetField (2, GID_B_METAL_STOR));
-        // ... but the second slot is gone instead of being started.
-        $this->assertSame (0, $this->countBuildQueue (2));
-        $this->assertSame (0, $this->countQueue ("type = '".QTYP_BUILD."' AND sub_id = $second"));
-        $this->assertSame (2, (int)$this->planetField (2, GID_B_CRYS_MINE), 'the second building was never built');
+        $this->assertFalse ($this->taskRow ($task));
+
+        // ... and the second slot is now running.
+        $rows = $this->buildQueueRows (2);
+        $this->assertCount (1, $rows);
+        $this->assertSame ($second, (int)$rows[0]['id']);
+        $this->assertSame (2, (int)$rows[0]['list_id']);
+
+        $events = $this->queueRows ("type = '".QTYP_BUILD."' AND sub_id = $second");
+        $this->assertCount (1, $events);
+        $this->assertSame (GID_B_CRYS_STOR, (int)$events[0]['obj_id']);
+        $this->assertSame (4, (int)$events[0]['level']);
+        $this->assertSame ($this->now, (int)$events[0]['start'], 'the second slot starts when the first one ends');
+
+        // It is still under construction, and its price was charged on start-up.
+        $this->assertSame (3, (int)$this->planetField (2, GID_B_CRYS_STOR));
+        $cost = TechPrice (GID_B_CRYS_STOR, 4);
+        $after = $this->planetResources (2);
+        $this->assertSame ($before[GID_RC_METAL] - (int)$cost[GID_RC_METAL], $after[GID_RC_METAL]);
+        $this->assertSame ($before[GID_RC_CRYSTAL] - (int)$cost[GID_RC_CRYSTAL], $after[GID_RC_CRYSTAL]);
+        $this->assertSame ($messagesBefore, $this->countMessages (1));
     }
 
     /**

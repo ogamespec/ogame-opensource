@@ -118,7 +118,10 @@ function BotBuild (int $obj_id) : int
     global $BotID, $BotNow, $GlobalUni;
     $user = LoadUser ($BotID);
     if ($user == null) return 0;
-    $aktplanet = LoadPlanetById ( $user['aktplanet'] );
+    // GetUpdatePlanet(), not LoadPlanetById(): CanBuild() has to see the same
+    // row BotCanBuild() checks - advanced production and the virtual energy
+    // resource - or it rejects every order with "not enough resources".
+    $aktplanet = GetUpdatePlanet ( $user['aktplanet'], $BotNow );
     if ($aktplanet == null) return 0;
     $level = $aktplanet[$obj_id] + 1;
     $text = CanBuild ( $user, $aktplanet, $obj_id, $level, false );
